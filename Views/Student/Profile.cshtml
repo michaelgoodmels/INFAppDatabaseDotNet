@@ -1,0 +1,196 @@
+﻿@model IMS25T_Core.Models.Student
+
+@{
+    ViewBag.Title = "Mein Profil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row mb-4">
+    <div class="col-lg-12">
+        <h1><i class="fas fa-id-card"></i> Mein Profil</h1>
+        <p class="text-muted">PersÃ¶nliche Informationen</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-user"></i> PersÃ¶nliche Daten</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label"><strong>Vorname:</strong></label>
+                        <p>@Model.FirstName</p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label"><strong>Nachname:</strong></label>
+                        <p>@Model.LastName</p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label"><strong>Geschlecht:</strong></label>
+                        <p>
+                            @if (Model.Gender == 'm')
+                            {
+                                <span class="badge badge-primary"><i class="fas fa-mars"></i> MÃ¤nnlich</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-info"><i class="fas fa-venus"></i> Weiblich</span>
+                            }
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label"><strong>Geburtsdatum:</strong></label>
+                        <p>@Model.DateOfBirth.ToString("dd.MM.yyyy") (@Model.Age Jahre alt)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-map-marker-alt"></i> Adressdaten</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label class="form-label"><strong>StraÃŸe:</strong></label>
+                        <p>@Model.Street</p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label"><strong>Postleitzahl:</strong></label>
+                        <p>@Model.PostalCode</p>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label"><strong>Ort:</strong></label>
+                        <p>@Model.City</p>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label"><strong>Kanton:</strong></label>
+                        <p>@Model.Canton</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-phone"></i> Kontaktdaten</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label"><strong>Mobiltelefon:</strong></label>
+                        <p>
+                            @if (!string.IsNullOrEmpty(Model.PhoneMobile))
+                            {
+                                @Model.PhoneMobile
+                            }
+                            else
+                            {
+                                <span style="color: #94a3b8;">-</span>
+                            }
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label"><strong>Telefon (Privat):</strong></label>
+                        <p>
+                            @if (!string.IsNullOrEmpty(Model.PhoneHome))
+                            {
+                                @Model.PhoneHome
+                            }
+                            else
+                            {
+                                <span style="color: #94a3b8;">-</span>
+                            }
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-chalkboard-user"></i> Bildungsdaten</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label class="form-label"><strong>Lehrperson:</strong></label>
+                        <p>@Model.TeacherName</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Info-Box -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-info-circle"></i> Information</h5>
+            </div>
+            <div class="card-body">
+                <p>
+                    <i class="fas fa-check-circle" style="color: #22c55e;"></i>
+                    Ihr Profil wird vom Administrator verwaltet.
+                </p>
+                <p style="margin-top: 15px;">
+                    <i class="fas fa-arrow-right" style="color: #3b82f6;"></i>
+                    <a href="@Url.Action("Dashboard", "Student")" style="color: #3b82f6; text-decoration: none;">
+                        Zu Ihren Noten
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        background-color: #1e293b;
+        border: 1px solid #3b82f6;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
+        color: #e2e8f0;
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.2);
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        border-bottom: 2px solid #3b82f6;
+        color: white;
+    }
+
+    .form-label {
+        color: #cbd5e1;
+        font-weight: 600;
+    }
+
+    h1 {
+        color: white;
+        margin-bottom: 10px;
+    }
+
+    .badge-info {
+        background-color: #0c4a6e;
+    }
+
+    p {
+        color: #e2e8f0;
+        margin: 5px 0;
+    }
+</style>

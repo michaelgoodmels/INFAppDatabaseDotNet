@@ -1,0 +1,156 @@
+@using System.Data;
+
+@{
+    ViewBag.Title = "Alle Noten";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    DataTable gradesTable = (DataTable)Model;
+}
+
+<div class="row mb-4">
+    <div class="col-lg-12">
+        <h1><i class="fas fa-list"></i> Alle Noten (Übersicht)</h1>
+        <p class="text-muted">Vollständige Notenliste aller Schüler nach Lehrjahren</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-table"></i> Noten-Tabelle</h5>
+            </div>
+            <div class="card-body p-0">
+                @if (gradesTable != null && gradesTable.Rows.Count > 0)
+                {
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Schüler</th>
+                                    <th>Modul</th>
+                                    <th>Lehrjahr</th>
+                                    <th style="width: 100px;">Note</th>
+                                    <th>Aktualisiert</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (DataRow row in gradesTable.Rows)
+                                {
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                @if (row["StudentName"] != null && row["StudentName"] != DBNull.Value)
+                                                {
+                                                    @row["StudentName"].ToString()
+                                                }
+                                                else
+                                                {
+                                                    <span style="color: #94a3b8;">-</span>
+                                                }
+                                            </strong>
+                                        </td>
+                                        <td>
+                                            @if (row["ModuleName"] != null && row["ModuleName"] != DBNull.Value)
+                                            {
+                                                @row["ModuleName"].ToString()
+                                            }
+                                            else
+                                            {
+                                                <span style="color: #94a3b8;">-</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (row["SchoolYear"] != null && row["SchoolYear"] != DBNull.Value)
+                                            {
+                                                <span class="badge badge-primary">@row["SchoolYear"].ToString()</span>
+                                            }
+                                            else
+                                            {
+                                                <span style="color: #94a3b8;">-</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (row["Grade"] != null && row["Grade"] != DBNull.Value)
+                                            {
+                                                <strong style="color: #fbbf24;">@Convert.ToDecimal(row["Grade"]).ToString("F1")</strong>
+                                            }
+                                            else
+                                            {
+                                                <span style="color: #94a3b8; font-style: italic;">Keine Note</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (row["UpdatedAt"] != null && row["UpdatedAt"] != DBNull.Value)
+                                            {
+                                                <small>@Convert.ToDateTime(row["UpdatedAt"]).ToString("dd.MM.yyyy HH:mm")</small>
+                                            }
+                                            else
+                                            {
+                                                <span style="color: #94a3b8;">-</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info m-3" role="alert">
+                        <i class="fas fa-info-circle"></i> Keine Noten gefunden.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Export-Button (optional für Zukunft) -->
+<div class="row mt-4">
+    <div class="col-lg-12">
+        <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Zurück zum Dashboard
+        </a>
+    </div>
+</div>
+
+<style>
+    .card {
+        background-color: #1e293b;
+        border: 1px solid #3b82f6;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        border-bottom: 2px solid #3b82f6;
+        color: white;
+    }
+
+    .table-dark tbody tr:hover {
+        background-color: #0f172a;
+    }
+
+    .badge-primary {
+        background-color: #3b82f6;
+    }
+
+    h1 {
+        color: white;
+        margin-bottom: 10px;
+    }
+
+    .btn-secondary {
+        background-color: #475569;
+        border-color: #475569;
+        transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background-color: #64748b;
+        border-color: #64748b;
+        box-shadow: 0 4px 15px rgba(71, 85, 105, 0.3);
+    }
+</style>

@@ -1,0 +1,223 @@
+﻿@model List<IMS25T_Core.Models.Student>
+
+@{
+    ViewBag.Title = "Statistiken";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Dictionary<int, decimal> studentAverages = (Dictionary<int, decimal>)ViewBag.StudentAverages;
+}
+
+<div class="row mb-4">
+    <div class="col-lg-12">
+        <h1><i class="fas fa-chart-bar"></i> Notenverwaltungs-Statistiken</h1>
+        <p class="text-muted">Ãœbersicht der SchÃ¼lerdurchschnitte</p>
+    </div>
+</div>
+
+<!-- Statistik-Ãœbersicht -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-user-graduate"></i> SchÃ¼ler mit Noten</h5>
+                <p class="card-text" style="font-size: 2.5rem; color: #60a5fa; font-weight: bold;">
+                    @studentAverages.Count(x => x.Value > 0)
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-users"></i> SchÃ¼ler ohne Noten</h5>
+                <p class="card-text" style="font-size: 2.5rem; color: #fbbf24; font-weight: bold;">
+                    @studentAverages.Count(x => x.Value == 0)
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-calculator"></i> Durchschnitt (Alle)</h5>
+                <p class="card-text" style="font-size: 2.5rem; color: #22c55e; font-weight: bold;">
+                    @if (studentAverages.Any(x => x.Value > 0))
+                    {
+                        @Math.Round(studentAverages.Where(x => x.Value > 0).Average(x => x.Value), 1).ToString("F1")
+                    }
+                    else
+                    {
+                        <span style="color: #94a3b8;">N/A</span>
+                    }
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SchÃ¼ler-Statistiken Tabelle -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-list"></i> SchÃ¼ler-Durchschnitte</h5>
+            </div>
+            <div class="card-body p-0">
+                @if (Model.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Nr.</th>
+                                    <th>Vorname</th>
+                                    <th>Nachname</th>
+                                    <th>Wohnort</th>
+                                    <th>Lehrperson</th>
+                                    <th style="width: 150px; text-align: center;">Durchschnitt</th>
+                                    <th style="width: 100px;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{int counter = 1;}
+                                @foreach (var student in Model)
+                                {
+                                    decimal average = 0;
+                                    if (studentAverages.ContainsKey(student.StudentId))
+                                    {
+                                        average = studentAverages[student.StudentId];
+                                    }
+
+                                    <tr>
+                                        <td>@counter</td>
+                                        <td>
+                                            <strong>@student.FirstName</strong>
+                                        </td>
+                                        <td>@student.LastName</td>
+                                        <td>@student.City</td>
+                                        <td>@student.TeacherName</td>
+                                        <td style="text-align: center;">
+                                            @if (average > 0)
+                                            {
+                                                <span style="font-size: 1.3rem; font-weight: bold; color: #fbbf24;">
+                                                    @average.ToString("F1")
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span style="color: #94a3b8; font-style: italic;">Keine Noten</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (average > 0)
+                                            {
+                                                if (average >= 5.0m)
+                                                {
+                                                    <span class="badge" style="background-color: #22c55e;">
+                                                        <i class="fas fa-check-circle"></i> Gut
+                                                    </span>
+                                                }
+                                                else if (average >= 4.0m)
+                                                {
+                                                    <span class="badge" style="background-color: #3b82f6;">
+                                                        <i class="fas fa-check"></i> OK
+                                                    </span>
+                                                }
+                                                else if (average >= 3.0m)
+                                                {
+                                                    <span class="badge" style="background-color: #f59e0b;">
+                                                        <i class="fas fa-exclamation"></i> Schwach
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge" style="background-color: #ef4444;">
+                                                        <i class="fas fa-times"></i> Sehr Schwach
+                                                    </span>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span class="badge" style="background-color: #64748b;">
+                                                    <i class="fas fa-circle"></i> Keine
+                                                </span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    counter++;
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info m-3" role="alert">
+                        <i class="fas fa-info-circle"></i> Keine SchÃ¼ler gefunden.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ZurÃ¼ck-Button -->
+<div class="row mt-4">
+    <div class="col-lg-12">
+        <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> ZurÃ¼ck zum Dashboard
+        </a>
+    </div>
+</div>
+
+<style>
+    .card {
+        background-color: #1e293b;
+        border: 1px solid #3b82f6;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
+        color: #e2e8f0;
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.2);
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        border-bottom: 2px solid #3b82f6;
+        color: white;
+    }
+
+    .card-body {
+        background-color: #1e293b;
+    }
+
+    .table-dark tbody tr:hover {
+        background-color: #0f172a;
+    }
+
+    .badge {
+        padding: 6px 10px;
+        font-weight: 600;
+        border-radius: 4px;
+    }
+
+    h1 {
+        color: white;
+        margin-bottom: 10px;
+    }
+
+    .btn-secondary {
+        background-color: #475569;
+        border-color: #475569;
+        transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background-color: #64748b;
+        border-color: #64748b;
+        box-shadow: 0 4px 15px rgba(71, 85, 105, 0.3);
+    }
+</style>

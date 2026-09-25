@@ -1,0 +1,240 @@
+﻿@model IMS25T_Core.Models.StudentModulesViewModel
+
+@{
+    ViewBag.Title = "SchÃ¼ler Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row mb-4">
+    <div class="col-lg-12">
+        <h1><i class="fas fa-user-graduate"></i> @Model.StudentName</h1>
+        <p class="text-muted">Notenverwaltung fÃ¼r diesen SchÃ¼ler</p>
+    </div>
+</div>
+
+<!-- Gesamtdurchschnitt -->
+<div class="row mb-4">
+    <div class="col-lg-4 mx-auto">
+        <div class="average-grade-display">
+            <h3>Gesamtdurchschnitt</h3>
+            <div class="grade-value">
+                @if (Model.AverageGrade > 0)
+                {
+                    @Model.AverageGrade.ToString("F1")
+                }
+                else
+                {
+                    <span style="color: #94a3b8;">Keine Noten</span>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Lehrjahre mit Modulen (bearbeitbar) -->
+<div class="row">
+    <div class="col-lg-12">
+        @foreach (var yearGroup in Model.SchoolYearModules)
+        {
+            <div class="section mb-4">
+                <div class="section-header">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <i class="fas fa-book"></i> @yearGroup.SchoolYearDescription
+                        </div>
+                        @if (yearGroup.YearAverageGrade.HasValue && yearGroup.YearAverageGrade > 0)
+                        {
+                            <span class="badge badge-primary">
+                                Durchschnitt: @yearGroup.YearAverageGrade.Value.ToString("F1")
+                            </span>
+                        }
+                    </div>
+                </div>
+                <div class="section-body">
+                    @if (yearGroup.Modules.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-dark table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50%;">Modul</th>
+                                        <th style="width: 20%;">Modulcode</th>
+                                        <th style="width: 30%;">Note (1.0 - 6.0)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var module in yearGroup.Modules)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@module.ModuleName</strong>
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-secondary">@module.ModuleCode</span>
+                                            </td>
+                                            <td>
+                                                <input type="number" 
+                                                       class="grade-input form-control admin-grade-input" 
+                                                       data-module-id="@module.ModuleId"
+                                                       step="0.1" 
+                                                       min="1.0" 
+                                                       max="6.0"
+                                                       value="@(module.GradeValue.HasValue ? module.GradeValue.Value.ToString("F1") : "")"
+                                                       placeholder="z.B. 4.5" />
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center py-3">Keine Module fÃ¼r dieses Lehrjahr.</p>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- ZurÃ¼ck-Button -->
+<div class="row mt-4">
+    <div class="col-lg-12">
+        <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> ZurÃ¼ck zum Dashboard
+        </a>
+    </div>
+</div>
+
+<!-- JavaScript fÃ¼r Admin-Notenspeicherung -->
+<script>
+    $(document).ready(function () {
+        var studentId = @Model.StudentId;
+
+        $(".admin-grade-input").on("change", function () {
+            var moduleId = $(this).data("module-id");
+            var gradeValue = $(this).val();
+            var $input = $(this);
+
+            // Validierung
+            if (gradeValue && (isNaN(gradeValue) || gradeValue < 1.0 || gradeValue > 6.0)) {
+                alert("Note muss zwischen 1.0 und 6.0 liegen!");
+                $input.val("");
+                return;
+            }
+
+            // AJAX Request zum Speichern
+            $.ajax({
+                url: '@Url.Action("EditGrade", "Admin")',
+                type: 'POST',
+                data: {
+                    studentId: studentId,
+                    moduleId: moduleId,
+                    gradeValue: gradeValue
+                },
+                success: function (response) {
+                    if (response.success) {
+                        // Erfolgs-Feedback
+                        var originalColor = $input.css("border-color");
+                        $input.css("border-color", "#22c55e");
+                        setTimeout(function () {
+                            $input.css("border-color", originalColor);
+                        }, 1000);
+
+                        // Aktualisiere Durchschnitt
+                        location.reload();
+                    } else {
+                        alert("Fehler: " + response.message);
+                        $input.val("");
+                    }
+                },
+                error: function () {
+                    alert("Fehler beim Speichern der Note!");
+                    $input.val("");
+                }
+            });
+        });
+    });
+</script>
+
+<style>
+    .section {
+        margin-bottom: 30px;
+    }
+
+    .section-header {
+        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        padding: 15px 20px;
+        border-radius: 8px 8px 0 0;
+        color: white;
+        border-bottom: 2px solid #3b82f6;
+        font-weight: 600;
+    }
+
+    .section-body {
+        background-color: #1e293b;
+        padding: 0;
+        border: 1px solid #3b82f6;
+        border-top: none;
+        border-radius: 0 0 8px 8px;
+    }
+
+    .grade-input {
+        background-color: #0f172a;
+        border: 1px solid #3b82f6;
+        color: #e2e8f0;
+        text-align: center;
+        font-weight: bold;
+        border-radius: 6px;
+        padding: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .grade-input:focus {
+        border-color: #60a5fa;
+        box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+        background-color: #0f172a;
+        color: #e2e8f0;
+    }
+
+    .badge-secondary {
+        background-color: #475569;
+    }
+
+    .average-grade-display {
+        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .average-grade-display h3 {
+        color: #bfdbfe;
+        margin-bottom: 10px;
+    }
+
+    .average-grade-display .grade-value {
+        font-size: 2.5rem;
+        color: white;
+        font-weight: bold;
+    }
+
+    h1 {
+        color: white;
+        margin-bottom: 10px;
+    }
+
+    .btn-secondary {
+        background-color: #475569;
+        border-color: #475569;
+        transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background-color: #64748b;
+        border-color: #64748b;
+        box-shadow: 0 4px 15px rgba(71, 85, 105, 0.3);
+    }
+</style>
