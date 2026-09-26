@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("IMS25T_Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5fe308a939fcfb9ed8b78c92b1c122074ef4909b")]
 [assembly: System.Reflection.AssemblyProductAttribute("IMS25T_Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("IMS25T_Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
