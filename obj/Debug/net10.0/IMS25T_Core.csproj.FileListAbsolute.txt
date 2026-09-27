@@ -132,3 +132,4 @@ C:\Users\michaelgood\source\repos\michaelgoodmels\IMS25T_Core\obj\Debug\net10.0\
 C:\Users\michaelgood\source\repos\michaelgoodmels\IMS25T_Core\obj\Debug\net10.0\IMS25T_Core.pdb
 C:\Users\michaelgood\source\repos\michaelgoodmels\IMS25T_Core\obj\Debug\net10.0\IMS25T_Core.genruntimeconfig.cache
 C:\Users\michaelgood\source\repos\michaelgoodmels\IMS25T_Core\obj\Debug\net10.0\ref\IMS25T_Core.dll
+C:\Users\michaelgood\source\repos\michaelgoodmels\IMS25T_Core\obj\Debug\net10.0\IMS25T_Core.sourcelink.json

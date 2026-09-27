@@ -9,13 +9,15 @@
     }
   },
   "profiles": {
-    "http": {
+    "IMS25T_Core": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
+      "launchUrl": "http://localhost:8000",
       "applicationUrl": "http://localhost:8000",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:8000"
       }
     }
   }
