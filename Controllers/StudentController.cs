@@ -97,6 +97,7 @@ namespace INFAppDatabaseDotNet.Controllers
                 _gradeDA.SaveMultipleGrades(student.StudentId, moduleId, parsedGrade1, parsedGrade2, parsedGrade3);
 
                 StudentModulesViewModel viewModel = _gradeDA.GetStudentModulesViewModel(student.StudentId);
+                System.Diagnostics.Debug.WriteLine($"[SaveGrades] Returning average: {viewModel.AverageGrade}");
                 return Json(new { success = true, averageGrade = viewModel.AverageGrade });
             }
             catch (Exception ex)

@@ -134,6 +134,7 @@ namespace INFAppDatabaseDotNet.Models
                         new SqlParameter("@Grade2", grade2 ?? (object)DBNull.Value),
                         new SqlParameter("@Grade3", grade3 ?? (object)DBNull.Value));
 
+                    System.Diagnostics.Debug.WriteLine($"[GradeDA] Updated grades for Student {studentId}, Module {moduleId}: {grade1}, {grade2}, {grade3}");
                     return existingGrade.GradeId;
                 }
                 else
@@ -148,6 +149,7 @@ namespace INFAppDatabaseDotNet.Models
                         new SqlParameter("@Grade2", grade2 ?? (object)DBNull.Value),
                         new SqlParameter("@Grade3", grade3 ?? (object)DBNull.Value));
 
+                    System.Diagnostics.Debug.WriteLine($"[GradeDA] Inserted grades for Student {studentId}, Module {moduleId}: {grade1}, {grade2}, {grade3}");
                     return Convert.ToInt32(result);
                 }
             }
@@ -198,8 +200,11 @@ namespace INFAppDatabaseDotNet.Models
 
                 if (result != DBNull.Value && result != null)
                 {
-                    return Math.Round(Convert.ToDecimal(result), 1);
+                    decimal avg = Math.Round(Convert.ToDecimal(result), 1);
+                    System.Diagnostics.Debug.WriteLine($"[GradeDA] Average for Student {studentId}: {avg}");
+                    return avg;
                 }
+                System.Diagnostics.Debug.WriteLine($"[GradeDA] No grades found for Student {studentId}");
                 return 0m;
             }
             catch (Exception ex)
