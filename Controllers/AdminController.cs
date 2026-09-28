@@ -80,36 +80,34 @@ namespace INFAppDatabaseDotNet.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditGrade(int studentId, int moduleId, string gradeValue)
+        public IActionResult EditGrades(int studentId, int moduleId, string grade1, string grade2, string grade3)
         {
             try
             {
-                if (string.IsNullOrEmpty(gradeValue))
+                // Konvertiere und validiere Noten
+                decimal? parsedGrade1 = null;
+                decimal? parsedGrade2 = null;
+                decimal? parsedGrade3 = null;
+
+                if (!string.IsNullOrEmpty(grade1) && decimal.TryParse(grade1.Replace(",", "."), out decimal g1))
                 {
-                    Grade existingGrade = _gradeDA.GetStudentGrade(studentId, moduleId);
-                    if (existingGrade != null)
-                    {
-                        _gradeDA.DeleteGrade(existingGrade.GradeId);
-                    }
+                    if (g1 >= 1.0m && g1 <= 6.0m) parsedGrade1 = g1;
+                    else return Json(new { success = false, message = "Note 1 ungültig (1.0-6.0)" });
                 }
-                else
+
+                if (!string.IsNullOrEmpty(grade2) && decimal.TryParse(grade2.Replace(",", "."), out decimal g2))
                 {
-                    if (decimal.TryParse(gradeValue.Replace(",", "."), out decimal grade))
-                    {
-                        if (grade >= 1.0m && grade <= 6.0m)
-                        {
-                            _gradeDA.SaveGrade(studentId, moduleId, grade);
-                        }
-                        else
-                        {
-                            return Json(new { success = false, message = "Note muss zwischen 1.0 und 6.0 liegen." });
-                        }
-                    }
-                    else
-                    {
-                        return Json(new { success = false, message = "UngÃ¼ltige Note." });
-                    }
+                    if (g2 >= 1.0m && g2 <= 6.0m) parsedGrade2 = g2;
+                    else return Json(new { success = false, message = "Note 2 ungültig (1.0-6.0)" });
                 }
+
+                if (!string.IsNullOrEmpty(grade3) && decimal.TryParse(grade3.Replace(",", "."), out decimal g3))
+                {
+                    if (g3 >= 1.0m && g3 <= 6.0m) parsedGrade3 = g3;
+                    else return Json(new { success = false, message = "Note 3 ungültig (1.0-6.0)" });
+                }
+
+                _gradeDA.SaveMultipleGrades(studentId, moduleId, parsedGrade1, parsedGrade2, parsedGrade3);
 
                 StudentModulesViewModel viewModel = _gradeDA.GetStudentModulesViewModel(studentId);
                 return Json(new { success = true, averageGrade = viewModel.AverageGrade });

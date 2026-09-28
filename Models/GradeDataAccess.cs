@@ -73,7 +73,7 @@ namespace INFAppDatabaseDotNet.Models
         {
             try
             {
-                // ÃœberprÃ¼fe, ob die Note bereits existiert
+                // Überprüfe, ob die Note bereits existiert
                 Grade existingGrade = GetStudentGrade(studentId, moduleId);
 
                 if (existingGrade != null)
@@ -114,6 +114,56 @@ namespace INFAppDatabaseDotNet.Models
         }
 
         /// <summary>
+        /// Speichert oder aktualisiert 3 Noten pro Modul
+        /// </summary>
+        public int SaveMultipleGrades(int studentId, int moduleId, decimal? grade1, decimal? grade2, decimal? grade3)
+        {
+            try
+            {
+                Grade existingGrade = GetStudentGrade(studentId, moduleId);
+
+                if (existingGrade != null)
+                {
+                    // Update
+                    string updateQuery = @"
+                        UPDATE StudentGrades
+                        SET Grade = @Grade1, Grade2 = @Grade2, Grade3 = @Grade3, UpdatedAt = GETDATE()
+                        WHERE StudentId = @StudentId AND ModuleId = @ModuleId";
+
+                    ExecuteNonQuery(updateQuery,
+                        new SqlParameter("@StudentId", studentId),
+                        new SqlParameter("@ModuleId", moduleId),
+                        new SqlParameter("@Grade1", grade1 ?? (object)DBNull.Value),
+                        new SqlParameter("@Grade2", grade2 ?? (object)DBNull.Value),
+                        new SqlParameter("@Grade3", grade3 ?? (object)DBNull.Value));
+
+                    return existingGrade.GradeId;
+                }
+                else
+                {
+                    // Insert
+                    string insertQuery = @"
+                        INSERT INTO StudentGrades (StudentId, ModuleId, Grade, Grade2, Grade3, EnteredAt, UpdatedAt)
+                        VALUES (@StudentId, @ModuleId, @Grade1, @Grade2, @Grade3, GETDATE(), GETDATE());
+                        SELECT SCOPE_IDENTITY();";
+
+                    object result = ExecuteScalar(insertQuery,
+                        new SqlParameter("@StudentId", studentId),
+                        new SqlParameter("@ModuleId", moduleId),
+                        new SqlParameter("@Grade1", grade1 ?? (object)DBNull.Value),
+                        new SqlParameter("@Grade2", grade2 ?? (object)DBNull.Value),
+                        new SqlParameter("@Grade3", grade3 ?? (object)DBNull.Value));
+
+                    return Convert.ToInt32(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Fehler beim Speichern der Noten: " + ex.Message);
+            }
+        }
+
+        /// <summary>
         /// LÃ¶scht eine Note
         /// </summary>
         public bool DeleteGrade(int gradeId)
@@ -134,16 +184,21 @@ namespace INFAppDatabaseDotNet.Models
         }
 
         /// <summary>
-        /// Berechnet den Durchschnitt fÃ¼r einen SchÃ¼ler
+        /// Berechnet den Durchschnitt fÃ¼r einen SchÃ¼ler (alle 3 Noten pro Modul)
         /// </summary>
         public decimal GetStudentAverageGrade(int studentId)
         {
             try
             {
                 string query = @"
-                    SELECT AVG(CAST(Grade AS DECIMAL(3,1))) AS AverageGrade
-                    FROM StudentGrades
-                    WHERE StudentId = @StudentId AND Grade IS NOT NULL";
+                    SELECT AVG(grade_value) AS AverageGrade
+                    FROM (
+                        SELECT Grade AS grade_value FROM StudentGrades WHERE StudentId = @StudentId AND Grade IS NOT NULL
+                        UNION ALL
+                        SELECT Grade2 FROM StudentGrades WHERE StudentId = @StudentId AND Grade2 IS NOT NULL
+                        UNION ALL
+                        SELECT Grade3 FROM StudentGrades WHERE StudentId = @StudentId AND Grade3 IS NOT NULL
+                    ) AS all_grades";
 
                 object result = ExecuteScalar(query, new SqlParameter("@StudentId", studentId));
 
@@ -160,17 +215,27 @@ namespace INFAppDatabaseDotNet.Models
         }
 
         /// <summary>
-        /// Berechnet den Durchschnitt fÃ¼r ein Lehrjahr
+        /// Berechnet den Durchschnitt für ein Lehrjahr (alle 3 Noten pro Modul)
         /// </summary>
         public decimal GetStudentYearAverageGrade(int studentId, int schoolYearId)
         {
             try
             {
                 string query = @"
-                    SELECT AVG(CAST(sg.Grade AS DECIMAL(3,1))) AS AverageGrade
-                    FROM StudentGrades sg
-                    INNER JOIN Modules m ON sg.ModuleId = m.ModuleId
-                    WHERE sg.StudentId = @StudentId AND m.SchoolYearId = @SchoolYearId AND sg.Grade IS NOT NULL";
+                    SELECT AVG(grade_value) AS AverageGrade
+                    FROM (
+                        SELECT sg.Grade AS grade_value FROM StudentGrades sg
+                        INNER JOIN Modules m ON sg.ModuleId = m.ModuleId
+                        WHERE sg.StudentId = @StudentId AND m.SchoolYearId = @SchoolYearId AND sg.Grade IS NOT NULL
+                        UNION ALL
+                        SELECT sg.Grade2 FROM StudentGrades sg
+                        INNER JOIN Modules m ON sg.ModuleId = m.ModuleId
+                        WHERE sg.StudentId = @StudentId AND m.SchoolYearId = @SchoolYearId AND sg.Grade2 IS NOT NULL
+                        UNION ALL
+                        SELECT sg.Grade3 FROM StudentGrades sg
+                        INNER JOIN Modules m ON sg.ModuleId = m.ModuleId
+                        WHERE sg.StudentId = @StudentId AND m.SchoolYearId = @SchoolYearId AND sg.Grade3 IS NOT NULL
+                    ) AS all_grades";
 
                 object result = ExecuteScalar(query,
                     new SqlParameter("@StudentId", studentId),

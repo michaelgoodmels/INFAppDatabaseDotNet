@@ -14,19 +14,24 @@
 
 <!-- Gesamtdurchschnitt Anzeige -->
 <div class="row mb-4">
-    <div class="col-lg-4 mx-auto">
-        <div class="average-grade-display">
-            <h3>Gesamtdurchschnitt</h3>
-            <div class="grade-value">
-                @if (Model.AverageGrade > 0)
-                {
-                    @Model.AverageGrade.ToString("F1")
-                }
-                else
-                {
-                    <span style="color: #7dd3c0;">Keine Noten</span>
-                }
+    <div class="col-lg-6 mx-auto">
+        <div style="display: flex; gap: 20px; align-items: center;">
+            <div class="average-grade-display" style="flex: 1;">
+                <h3>Gesamtdurchschnitt</h3>
+                <div class="grade-value">
+                    @if (Model.AverageGrade > 0)
+                    {
+                        @Model.AverageGrade.ToString("F1")
+                    }
+                    else
+                    {
+                        <span style="color: #7dd3c0;">Keine Noten</span>
+                    }
+                </div>
             </div>
+            <button type="button" id="saveAllGradesBtn" class="btn btn-primary" style="height: fit-content; padding: 12px 24px; font-weight: 600;">
+                <i class="fas fa-save"></i> Alle Noten speichern
+            </button>
         </div>
     </div>
 </div>
@@ -72,15 +77,34 @@
                                             <td>
                                                 <span class="badge badge-secondary">@module.ModuleCode</span>
                                             </td>
-                                            <td>
-                                                <input type="number" 
-                                                       class="grade-input form-control" 
+                                            <td style="display: flex; gap: 5px;">
+                                                <input type="number"
+                                                       class="grade-input form-control grade-input-1"
                                                        data-module-id="@module.ModuleId"
-                                                       step="0.1" 
-                                                       min="1.0" 
+                                                       data-grade-num="1"
+                                                       step="0.1"
+                                                       min="1.0"
                                                        max="6.0"
-                                                       value="@(module.GradeValue.HasValue ? module.GradeValue.Value.ToString("F1") : "")"
-                                                       placeholder="z.B. 4.5" />
+                                                       placeholder="Note 1"
+                                                       style="flex: 1;" />
+                                                <input type="number"
+                                                       class="grade-input form-control grade-input-2"
+                                                       data-module-id="@module.ModuleId"
+                                                       data-grade-num="2"
+                                                       step="0.1"
+                                                       min="1.0"
+                                                       max="6.0"
+                                                       placeholder="Note 2"
+                                                       style="flex: 1;" />
+                                                <input type="number"
+                                                       class="grade-input form-control grade-input-3"
+                                                       data-module-id="@module.ModuleId"
+                                                       data-grade-num="3"
+                                                       step="0.1"
+                                                       min="1.0"
+                                                       max="6.0"
+                                                       placeholder="Note 3"
+                                                       style="flex: 1;" />
                                             </td>
                                         </tr>
                                     }
@@ -104,50 +128,67 @@
 <!-- JavaScript fuer Notenspeicherung -->
 <script>
     $(document).ready(function () {
-        // Event-Listener fuer Noten-Eingaben
-        $(".grade-input").on("change", function () {
-            var moduleId = $(this).data("module-id");
-            var gradeValue = $(this).val();
-            var $input = $(this);
+        // Validierung einzelner Note
+        function validateGrade(value) {
+            if (!value) return true; // Leere Felder sind OK
+            if (isNaN(value) || value < 1.0 || value > 6.0) return false;
+            return true;
+        }
 
-            // Validierung
-            if (gradeValue && (isNaN(gradeValue) || gradeValue < 1.0 || gradeValue > 6.0)) {
-                alert("Note muss zwischen 1.0 und 6.0 liegen!");
-                $input.val("");
-                return;
-            }
+        // Save All Grades Button
+        $("#saveAllGradesBtn").on("click", function () {
+            var gradesToSave = [];
+            var isValid = true;
 
-            // AJAX Request zum Speichern
-            $.ajax({
-                url: '@Url.Action("SaveGrade", "Student")',
-                type: 'POST',
-                headers: {
-                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
-                },
-                data: {
-                    moduleId: moduleId,
-                    gradeValue: gradeValue
-                },
-                success: function (response) {
-                    if (response.success) {
-                        // Erfolgs-Feedback
-                        var originalColor = $input.css("border-color");
-                        $input.css("border-color", "#7dd3c0");
-                        setTimeout(function () {
-                            $input.css("border-color", originalColor);
-                        }, 1000);
+            // Sammle alle Noten pro Modul
+            var modules = {};
+            $(".grade-input").each(function () {
+                var moduleId = $(this).data("module-id");
+                var gradeNum = $(this).data("grade-num");
+                var gradeValue = $(this).val();
 
-                        // Aktualisiere Durchschnitt
-                        location.reload();
-                    } else {
-                        alert("Fehler: " + response.message);
-                        $input.val("");
-                    }
-                },
-                error: function () {
-                    alert("Fehler beim Speichern der Note!");
-                    $input.val("");
+                if (!validateGrade(gradeValue)) {
+                    alert("Note muss zwischen 1.0 und 6.0 liegen oder leer sein!");
+                    isValid = false;
+                    return false;
                 }
+
+                if (!modules[moduleId]) {
+                    modules[moduleId] = {};
+                }
+                modules[moduleId]["grade" + gradeNum] = gradeValue;
+            });
+
+            if (!isValid) return;
+
+            // Speichere alle Module
+            var moduleIds = Object.keys(modules);
+            var completed = 0;
+
+            $.each(modules, function (moduleId, grades) {
+                $.ajax({
+                    url: '@Url.Action("SaveGrades", "Student")',
+                    type: 'POST',
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    data: {
+                        moduleId: moduleId,
+                        grade1: grades.grade1 || "",
+                        grade2: grades.grade2 || "",
+                        grade3: grades.grade3 || ""
+                    },
+                    success: function (response) {
+                        completed++;
+                        if (completed === moduleIds.length) {
+                            alert("Alle Noten gespeichert!");
+                            location.reload();
+                        }
+                    },
+                    error: function () {
+                        alert("Fehler beim Speichern!");
+                    }
+                });
             });
         });
     });
