@@ -19,7 +19,7 @@
         <div class="card text-center">
             <div class="card-body">
                 <h5 class="card-title"><i class="fas fa-user-graduate"></i> Schueler mit Noten</h5>
-                <p class="card-text" style="font-size: 2.5rem; color: #60a5fa; font-weight: bold;">
+                <p class="card-text" style="font-size: 2.5rem; color: #80CBC4; font-weight: bold;">
                     @studentAverages.Count(x => x.Value > 0)
                 </p>
             </div>
@@ -29,7 +29,7 @@
         <div class="card text-center">
             <div class="card-body">
                 <h5 class="card-title"><i class="fas fa-users"></i> Schueler ohne Noten</h5>
-                <p class="card-text" style="font-size: 2.5rem; color: #fbbf24; font-weight: bold;">
+                <p class="card-text" style="font-size: 2.5rem; color: #B2DFDB; font-weight: bold;">
                     @studentAverages.Count(x => x.Value == 0)
                 </p>
             </div>
@@ -39,14 +39,14 @@
         <div class="card text-center">
             <div class="card-body">
                 <h5 class="card-title"><i class="fas fa-calculator"></i> Durchschnitt (Alle)</h5>
-                <p class="card-text" style="font-size: 2.5rem; color: #22c55e; font-weight: bold;">
+                <p class="card-text" style="font-size: 2.5rem; color: #4DB8AC; font-weight: bold;">
                     @if (studentAverages.Any(x => x.Value > 0))
                     {
                         @Math.Round(studentAverages.Where(x => x.Value > 0).Average(x => x.Value), 1).ToString("F1")
                     }
                     else
                     {
-                        <span style="color: #94a3b8;">N/A</span>
+                        <span style="color: #7ebdb3;">N/A</span>
                     }
                 </p>
             </div>
@@ -98,13 +98,13 @@
                                         <td style="text-align: center;">
                                             @if (average > 0)
                                             {
-                                                <span style="font-size: 1.3rem; font-weight: bold; color: #fbbf24;">
+                                                <span style="font-size: 1.3rem; font-weight: bold; color: #B2DFDB;">
                                                     @average.ToString("F1")
                                                 </span>
                                             }
                                             else
                                             {
-                                                <span style="color: #94a3b8; font-style: italic;">Keine Noten</span>
+                                                <span style="color: #7ebdb3; font-style: italic;">Keine Noten</span>
                                             }
                                         </td>
                                         <td>
@@ -112,32 +112,32 @@
                                             {
                                                 if (average >= 5.0m)
                                                 {
-                                                    <span class="badge" style="background-color: #22c55e;">
+                                                    <span class="badge" style="background-color: #4DB8AC;">
                                                         <i class="fas fa-check-circle"></i> Gut
                                                     </span>
                                                 }
                                                 else if (average >= 4.0m)
                                                 {
-                                                    <span class="badge" style="background-color: #3b82f6;">
+                                                    <span class="badge" style="background-color: #00695C;">
                                                         <i class="fas fa-check"></i> OK
                                                     </span>
                                                 }
                                                 else if (average >= 3.0m)
                                                 {
-                                                    <span class="badge" style="background-color: #f59e0b;">
+                                                    <span class="badge" style="background-color: #80CBC4;">
                                                         <i class="fas fa-exclamation"></i> Schwach
                                                     </span>
                                                 }
                                                 else
                                                 {
-                                                    <span class="badge" style="background-color: #ef4444;">
+                                                    <span class="badge" style="background-color: #004D40;">
                                                         <i class="fas fa-times"></i> Sehr Schwach
                                                     </span>
                                                 }
                                             }
                                             else
                                             {
-                                                <span class="badge" style="background-color: #64748b;">
+                                                <span class="badge" style="background-color: #5a9f97;">
                                                     <i class="fas fa-circle"></i> Keine
                                                 </span>
                                             }
@@ -171,31 +171,31 @@
 
 <style>
     .card {
-        background-color: #1e293b;
-        border: 1px solid #3b82f6;
+        background-color: #0d2d2a;
+        border: 1px solid #4DB8AC;
         border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
-        color: #e2e8f0;
+        box-shadow: 0 4px 15px rgba(77, 184, 172, 0.1);
+        color: #c8e6e1;
         transition: all 0.3s ease;
     }
 
     .card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.2);
+        box-shadow: 0 6px 20px rgba(77, 184, 172, 0.2);
     }
 
     .card-header {
-        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-        border-bottom: 2px solid #3b82f6;
+        background: linear-gradient(135deg, #004D40 0%, #4DB8AC 100%);
+        border-bottom: 2px solid #4DB8AC;
         color: white;
     }
 
     .card-body {
-        background-color: #1e293b;
+        background-color: #0d2d2a;
     }
 
     .table-dark tbody tr:hover {
-        background-color: #0f172a;
+        background-color: #0a1a18;
     }
 
     .badge {
@@ -210,15 +210,15 @@
     }
 
     .btn-secondary {
-        background-color: #475569;
-        border-color: #475569;
+        background-color: #3d8682;
+        border-color: #3d8682;
         transition: all 0.3s ease;
     }
 
     .btn-secondary:hover {
-        background-color: #64748b;
-        border-color: #64748b;
-        box-shadow: 0 4px 15px rgba(71, 85, 105, 0.3);
+        background-color: #5a9f97;
+        border-color: #5a9f97;
+        box-shadow: 0 4px 15px rgba(90, 159, 151, 0.3);
     }
 </style>
 

@@ -14,13 +14,13 @@
     <!-- Custom CSS -->
     <style>
         :root {
-            --primary-blue: #1e3a8a;
-            --secondary-blue: #3b82f6;
-            --light-blue: #dbeafe;
-            --dark-bg: #0f172a;
-            --darker-bg: #0a0f1f;
-            --card-bg: #1e293b;
-            --border-blue: #3b82f6;
+            --primary-blue: #004D40;
+            --secondary-blue: #4DB8AC;
+            --light-blue: #B2DFDB;
+            --dark-bg: #0a1a18;
+            --darker-bg: #050f0e;
+            --card-bg: #0d2d2a;
+            --border-blue: #4DB8AC;
         }
 
         * {
@@ -32,7 +32,7 @@
         html, body {
             height: 100%;
             background-color: var(--dark-bg);
-            color: #e2e8f0;
+            color: #c8e6e1;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
@@ -65,7 +65,7 @@
         }
 
         .nav-link {
-            color: #e2e8f0 !important;
+            color: #c8e6e1 !important;
             transition: all 0.3s ease;
             margin-left: 10px;
         }
@@ -86,14 +86,14 @@
             background-color: var(--card-bg);
             border: 1px solid var(--border-blue);
             border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
-            color: #e2e8f0;
+            box-shadow: 0 4px 15px rgba(77, 184, 172, 0.1);
+            color: #c8e6e1;
             transition: all 0.3s ease;
         }
 
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 6px 20px rgba(77, 184, 172, 0.2);
         }
 
         .card-header {
@@ -112,41 +112,41 @@
         .btn-primary:hover {
             background-color: var(--primary-blue);
             border-color: var(--primary-blue);
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 4px 15px rgba(77, 184, 172, 0.3);
         }
 
         .btn-secondary {
-            background-color: #475569;
-            border-color: #475569;
+            background-color: #3d8682;
+            border-color: #3d8682;
         }
 
         .btn-secondary:hover {
-            background-color: #64748b;
-            border-color: #64748b;
+            background-color: #5a9f97;
+            border-color: #5a9f97;
         }
 
         /* Form Controls */
         .form-control {
-            background-color: #1e293b;
+            background-color: #0d2d2a;
             border: 1px solid var(--border-blue);
-            color: #e2e8f0;
+            color: #c8e6e1;
         }
 
         .form-control:focus {
-            background-color: #1e293b;
-            color: #e2e8f0;
+            background-color: #0d2d2a;
+            color: #c8e6e1;
             border-color: var(--secondary-blue);
-            box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+            box-shadow: 0 0 0 0.2rem rgba(77, 184, 172, 0.25);
         }
 
         .form-label {
-            color: #cbd5e1;
+            color: #a8d8d0;
             font-weight: 500;
         }
 
         /* Tables */
         .table {
-            color: #e2e8f0;
+            color: #c8e6e1;
         }
 
         .table-dark {
@@ -160,11 +160,11 @@
         }
 
         .table-dark tbody td {
-            border-color: #334155;
+            border-color: #2a6660;
         }
 
         .table-dark tbody tr:hover {
-            background-color: #0f172a;
+            background-color: #0a1a18;
         }
 
         /* Alerts */
@@ -180,15 +180,15 @@
         }
 
         .alert-success {
-            background-color: #1b4332;
-            border-color: #22c55e;
-            color: #bbf7d0;
+            background-color: #003d36;
+            border-color: #4DB8AC;
+            color: #a4d9d0;
         }
 
         .alert-info {
-            background-color: #0c4a6e;
+            background-color: #00695C;
             border-color: var(--secondary-blue);
-            color: #bfdbfe;
+            color: #a4d9d0;
         }
 
         /* Footer */
@@ -197,7 +197,7 @@
             border-top: 2px solid var(--border-blue);
             padding: 20px;
             text-align: center;
-            color: #94a3b8;
+            color: #7ebdb3;
             margin-top: 40px;
         }
 
@@ -253,14 +253,14 @@
         }
 
         .badge-success {
-            background-color: #22c55e;
+            background-color: #4DB8AC;
         }
 
         /* Input Grade */
         .grade-input {
-            background-color: #1e293b;
+            background-color: #0d2d2a;
             border: 1px solid var(--border-blue);
-            color: #e2e8f0;
+            color: #c8e6e1;
             text-align: center;
             font-weight: bold;
             border-radius: 6px;
@@ -268,12 +268,12 @@
 
         .grade-input:focus {
             border-color: var(--secondary-blue);
-            box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+            box-shadow: 0 0 0 0.2rem rgba(77, 184, 172, 0.25);
         }
 
         /* Module Cards */
         .module-card {
-            background-color: #1e293b;
+            background-color: #0d2d2a;
             border-left: 4px solid var(--secondary-blue);
             padding: 15px;
             margin-bottom: 10px;
@@ -282,7 +282,7 @@
         }
 
         .module-card:hover {
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 4px 15px rgba(77, 184, 172, 0.2);
             transform: translateX(5px);
         }
 
@@ -296,7 +296,7 @@
         }
 
         .average-grade-display h3 {
-            color: #bfdbfe;
+            color: #a4d9d0;
             margin-bottom: 10px;
         }
 

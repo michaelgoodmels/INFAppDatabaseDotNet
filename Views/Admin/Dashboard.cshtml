@@ -17,7 +17,7 @@
         <div class="card text-center">
             <div class="card-body">
                 <h5 class="card-title"><i class="fas fa-users"></i> Schueler gesamt</h5>
-                <p class="card-text" style="font-size: 2.5rem; color: #60a5fa; font-weight: bold;">@Model.Count</p>
+                <p class="card-text" style="font-size: 2.5rem; color: #80CBC4; font-weight: bold;">@Model.Count</p>
             </div>
         </div>
     </div>
@@ -26,7 +26,7 @@
             <div class="card-body">
                 <h5 class="card-title"><i class="fas fa-list"></i> Alle Noten</h5>
                 <p class="card-text" style="font-size: 1.5rem;">
-                    <a href="@Url.Action("AllGrades", "Admin")" style="color: #60a5fa; text-decoration: none;">
+                    <a href="@Url.Action("AllGrades", "Admin")" style="color: #80CBC4; text-decoration: none;">
                         <i class="fas fa-arrow-right"></i> Anzeigen
                     </a>
                 </p>
@@ -38,7 +38,7 @@
             <div class="card-body">
                 <h5 class="card-title"><i class="fas fa-chart-bar"></i> Statistiken</h5>
                 <p class="card-text" style="font-size: 1.5rem;">
-                    <a href="@Url.Action("Statistics", "Admin")" style="color: #60a5fa; text-decoration: none;">
+                    <a href="@Url.Action("Statistics", "Admin")" style="color: #80CBC4; text-decoration: none;">
                         <i class="fas fa-arrow-right"></i> Anzeigen
                     </a>
                 </p>
@@ -50,7 +50,7 @@
             <div class="card-body">
                 <h5 class="card-title"><i class="fas fa-user-check"></i> Profil</h5>
                 <p class="card-text" style="font-size: 1rem;">
-                    <a href="@Url.Action("Index", "Login")" style="color: #60a5fa; text-decoration: none;">
+                    <a href="@Url.Action("Index", "Login")" style="color: #80CBC4; text-decoration: none;">
                         Abmelden
                     </a>
                 </p>
@@ -136,48 +136,48 @@
 
 <style>
     .card {
-        background-color: #1e293b;
-        border: 1px solid #3b82f6;
+        background-color: #0d2d2a;
+        border: 1px solid #4DB8AC;
         border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
-        color: #e2e8f0;
+        box-shadow: 0 4px 15px rgba(77, 184, 172, 0.1);
+        color: #c8e6e1;
         transition: all 0.3s ease;
     }
 
     .card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.2);
+        box-shadow: 0 6px 20px rgba(77, 184, 172, 0.2);
     }
 
     .card-header {
-        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-        border-bottom: 2px solid #3b82f6;
+        background: linear-gradient(135deg, #004D40 0%, #4DB8AC 100%);
+        border-bottom: 2px solid #4DB8AC;
         color: white;
         border-radius: 8px 8px 0 0;
     }
 
     .card-body {
-        background-color: #1e293b;
+        background-color: #0d2d2a;
     }
 
     .table-dark tbody tr:hover {
-        background-color: #0f172a;
+        background-color: #0a1a18;
     }
 
     .badge-info {
-        background-color: #0c4a6e;
+        background-color: #00695C;
     }
 
     .btn-primary {
-        background-color: #3b82f6;
-        border-color: #3b82f6;
+        background-color: #4DB8AC;
+        border-color: #4DB8AC;
         transition: all 0.3s ease;
     }
 
     .btn-primary:hover {
-        background-color: #1e3a8a;
-        border-color: #1e3a8a;
-        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        background-color: #004D40;
+        border-color: #004D40;
+        box-shadow: 0 4px 15px rgba(77, 184, 172, 0.3);
     }
 
     h1 {
