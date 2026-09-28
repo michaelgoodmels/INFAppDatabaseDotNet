@@ -98,6 +98,9 @@
     </div>
 </div>
 
+<!-- CSRF Token -->
+@Html.AntiForgeryToken()
+
 <!-- JavaScript fuer Notenspeicherung -->
 <script>
     $(document).ready(function () {
@@ -118,6 +121,9 @@
             $.ajax({
                 url: '@Url.Action("SaveGrade", "Student")',
                 type: 'POST',
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
                 data: {
                     moduleId: moduleId,
                     gradeValue: gradeValue

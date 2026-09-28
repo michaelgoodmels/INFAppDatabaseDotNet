@@ -107,6 +107,9 @@
     </div>
 </div>
 
+<!-- CSRF Token -->
+@Html.AntiForgeryToken()
+
 <!-- JavaScript fuer Admin-Notenspeicherung -->
 <script>
     $(document).ready(function () {
@@ -128,6 +131,9 @@
             $.ajax({
                 url: '@Url.Action("EditGrade", "Admin")',
                 type: 'POST',
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
                 data: {
                     studentId: studentId,
                     moduleId: moduleId,
