@@ -194,8 +194,11 @@
                         console.log("Success response:", response);
                         completed++;
                         if (completed === moduleIds.length) {
+                            // Update average without reloading
+                            if (response.averageGrade) {
+                                $(".grade-value").text(response.averageGrade.toFixed(1));
+                            }
                             alert("Alle Noten gespeichert!");
-                            location.reload();
                         }
                     },
                     error: function (xhr, status, error) {
