@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace IMS25T_Core.Models
+namespace INFAppDatabaseDotNet.Models
 {
     public class Student
     {
@@ -70,3 +70,4 @@ namespace IMS25T_Core.Models
         }
     }
 }
+

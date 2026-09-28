@@ -5,7 +5,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
 
-namespace IMS25T_Core.Models
+namespace INFAppDatabaseDotNet.Models
 {
     public class GradeDataAccess : DataAccess
     {
@@ -296,3 +296,4 @@ namespace IMS25T_Core.Models
         }
     }
 }
+

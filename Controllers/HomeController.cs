@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using IMS25T_Core.Models;
+using INFAppDatabaseDotNet.Models;
 
-namespace IMS25T_Core.Controllers
+namespace INFAppDatabaseDotNet.Controllers
 {
     public class HomeController : Controller
     {
@@ -24,3 +24,4 @@ namespace IMS25T_Core.Controllers
         }
     }
 }
+

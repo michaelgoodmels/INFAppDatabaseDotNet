@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace IMS25T_Core.Models
+namespace INFAppDatabaseDotNet.Models
 {
     public class Module
     {
@@ -23,3 +23,4 @@ namespace IMS25T_Core.Models
         public virtual SchoolYear SchoolYear { get; set; }
     }
 }
+

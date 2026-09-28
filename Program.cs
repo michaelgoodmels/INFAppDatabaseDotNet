@@ -1,4 +1,4 @@
-using IMS25T_Core.Models;
+using INFAppDatabaseDotNet.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +12,7 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromMinutes(480); // 8 hours from Web.config
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
-    options.Cookie.Name = "IMS25T_Session";
+    options.Cookie.Name = "INFAppDatabaseDotNet_Session";
 });
 
 // Add authentication with cookie scheme

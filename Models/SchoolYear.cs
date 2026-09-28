@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace IMS25T_Core.Models
+namespace INFAppDatabaseDotNet.Models
 {
     public class SchoolYear
     {
@@ -23,3 +23,4 @@ namespace IMS25T_Core.Models
         }
     }
 }
+

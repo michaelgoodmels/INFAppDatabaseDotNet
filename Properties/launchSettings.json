@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "IMS25T_Core": {
+    "INFAppDatabaseDotNet": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
@@ -22,3 +22,4 @@
     }
   }
 }
+

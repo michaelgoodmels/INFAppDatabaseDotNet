@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Authorization;
-using IMS25T_Core.Models;
+using INFAppDatabaseDotNet.Models;
 using System.Collections.Generic;
 
-namespace IMS25T_Core.Controllers
+namespace INFAppDatabaseDotNet.Controllers
 {
     [Authorize(Roles = "Student")]
     public class StudentController : Controller
@@ -126,3 +126,4 @@ namespace IMS25T_Core.Controllers
         }
     }
 }
+

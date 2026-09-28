@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace IMS25T_Core.Models
+namespace INFAppDatabaseDotNet.Models
 {
     public class UserDataAccess : DataAccess
     {
@@ -152,3 +152,4 @@ namespace IMS25T_Core.Models
         }
     }
 }
+

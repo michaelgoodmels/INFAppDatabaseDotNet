@@ -4,9 +4,9 @@ using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Authorization;
-using IMS25T_Core.Models;
+using INFAppDatabaseDotNet.Models;
 
-namespace IMS25T_Core.Controllers
+namespace INFAppDatabaseDotNet.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
@@ -144,3 +144,4 @@ namespace IMS25T_Core.Controllers
         }
     }
 }
+

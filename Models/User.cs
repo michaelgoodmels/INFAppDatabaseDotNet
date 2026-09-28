@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace IMS25T_Core.Models
+namespace INFAppDatabaseDotNet.Models
 {
     public class User
     {
@@ -37,3 +37,4 @@ namespace IMS25T_Core.Models
         }
     }
 }
+

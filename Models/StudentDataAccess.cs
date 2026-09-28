@@ -4,7 +4,7 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 
-namespace IMS25T_Core.Models
+namespace INFAppDatabaseDotNet.Models
 {
     public class StudentDataAccess : DataAccess
     {
@@ -189,3 +189,4 @@ namespace IMS25T_Core.Models
         }
     }
 }
+
