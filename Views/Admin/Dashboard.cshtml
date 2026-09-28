@@ -8,7 +8,7 @@
 <div class="row mb-4">
     <div class="col-lg-12">
         <h1><i class="fas fa-tachometer-alt"></i> Admin-Dashboard</h1>
-        <p class="text-muted">Ãœbersicht aller SchÃ¼ler und deren Notenverwaltung</p>
+        <p class="text-muted">Uebersicht aller Schueler und deren Notenverwaltung</p>
     </div>
 </div>
 
@@ -16,7 +16,7 @@
     <div class="col-md-3">
         <div class="card text-center">
             <div class="card-body">
-                <h5 class="card-title"><i class="fas fa-users"></i> SchÃ¼ler gesamt</h5>
+                <h5 class="card-title"><i class="fas fa-users"></i> Schueler gesamt</h5>
                 <p class="card-text" style="font-size: 2.5rem; color: #60a5fa; font-weight: bold;">@Model.Count</p>
             </div>
         </div>
@@ -59,12 +59,12 @@
     </div>
 </div>
 
-<!-- SchÃ¼ler-Tabelle -->
+<!-- Schueler-Tabelle -->
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-user-graduate"></i> Alle SchÃ¼ler</h5>
+                <h5 class="mb-0"><i class="fas fa-user-graduate"></i> Alle Schueler</h5>
             </div>
             <div class="card-body p-0">
                 @if (Model.Any())
@@ -96,7 +96,7 @@
                                             @if (student.Gender == 'm')
                                             {
                                                 <span class="badge badge-primary">
-                                                    <i class="fas fa-mars"></i> MÃ¤nnlich
+                                                    <i class="fas fa-mars"></i> Maennlich
                                                 </span>
                                             }
                                             else
@@ -126,7 +126,7 @@
                 else
                 {
                     <div class="alert alert-info m-3" role="alert">
-                        <i class="fas fa-info-circle"></i> Keine SchÃ¼ler gefunden.
+                        <i class="fas fa-info-circle"></i> Keine Schueler gefunden.
                     </div>
                 }
             </div>

@@ -1,14 +1,14 @@
 ﻿@model INFAppDatabaseDotNet.Models.StudentModulesViewModel
 
 @{
-    ViewBag.Title = "SchÃ¼ler Details";
+    ViewBag.Title = "Schueler Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="row mb-4">
     <div class="col-lg-12">
         <h1><i class="fas fa-user-graduate"></i> @Model.StudentName</h1>
-        <p class="text-muted">Notenverwaltung fÃ¼r diesen SchÃ¼ler</p>
+        <p class="text-muted">Notenverwaltung fuer diesen Schueler</p>
     </div>
 </div>
 
@@ -90,7 +90,7 @@
                     }
                     else
                     {
-                        <p class="text-muted text-center py-3">Keine Module fÃ¼r dieses Lehrjahr.</p>
+                        <p class="text-muted text-center py-3">Keine Module fuer dieses Lehrjahr.</p>
                     }
                 </div>
             </div>
@@ -98,16 +98,16 @@
     </div>
 </div>
 
-<!-- ZurÃ¼ck-Button -->
+<!-- Zurueck-Button -->
 <div class="row mt-4">
     <div class="col-lg-12">
         <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> ZurÃ¼ck zum Dashboard
+            <i class="fas fa-arrow-left"></i> Zurueck zum Dashboard
         </a>
     </div>
 </div>
 
-<!-- JavaScript fÃ¼r Admin-Notenspeicherung -->
+<!-- JavaScript fuer Admin-Notenspeicherung -->
 <script>
     $(document).ready(function () {
         var studentId = @Model.StudentId;
