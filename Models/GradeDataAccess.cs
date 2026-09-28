@@ -124,11 +124,8 @@ namespace INFAppDatabaseDotNet.Models
 
                 if (existingGrade != null)
                 {
-                    // Update
-                    string updateQuery = @"
-                        UPDATE StudentGrades
-                        SET Grade = @Grade1, Grade2 = @Grade2, Grade3 = @Grade3, UpdatedAt = GETDATE()
-                        WHERE StudentId = @StudentId AND ModuleId = @ModuleId";
+                    // Update existing grade
+                    string updateQuery = "UPDATE StudentGrades SET Grade = @Grade1, Grade2 = @Grade2, Grade3 = @Grade3, UpdatedAt = GETDATE() WHERE StudentId = @StudentId AND ModuleId = @ModuleId";
 
                     ExecuteNonQuery(updateQuery,
                         new SqlParameter("@StudentId", studentId),
@@ -141,11 +138,8 @@ namespace INFAppDatabaseDotNet.Models
                 }
                 else
                 {
-                    // Insert
-                    string insertQuery = @"
-                        INSERT INTO StudentGrades (StudentId, ModuleId, Grade, Grade2, Grade3, EnteredAt, UpdatedAt)
-                        VALUES (@StudentId, @ModuleId, @Grade1, @Grade2, @Grade3, GETDATE(), GETDATE());
-                        SELECT SCOPE_IDENTITY();";
+                    // Insert new grade
+                    string insertQuery = "INSERT INTO StudentGrades (StudentId, ModuleId, Grade, Grade2, Grade3, EnteredAt, UpdatedAt) VALUES (@StudentId, @ModuleId, @Grade1, @Grade2, @Grade3, GETDATE(), GETDATE()); SELECT SCOPE_IDENTITY();";
 
                     object result = ExecuteScalar(insertQuery,
                         new SqlParameter("@StudentId", studentId),

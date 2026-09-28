@@ -88,6 +88,12 @@ namespace INFAppDatabaseDotNet.Controllers
                     else return Json(new { success = false, message = "Note 3 ungültig (1.0-6.0)" });
                 }
 
+                // Mindestens eine Note muss vorhanden sein
+                if (parsedGrade1 == null && parsedGrade2 == null && parsedGrade3 == null)
+                {
+                    return Json(new { success = false, message = "Mindestens eine Note muss eingegeben werden." });
+                }
+
                 _gradeDA.SaveMultipleGrades(student.StudentId, moduleId, parsedGrade1, parsedGrade2, parsedGrade3);
 
                 StudentModulesViewModel viewModel = _gradeDA.GetStudentModulesViewModel(student.StudentId);
