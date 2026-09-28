@@ -176,6 +176,7 @@
             var completed = 0;
 
             $.each(modules, function (moduleId, grades) {
+                console.log("Sending grades for module", moduleId, grades);
                 $.ajax({
                     url: '@Url.Action("EditGrades", "Admin")',
                     type: 'POST',
@@ -190,14 +191,16 @@
                         grade3: grades.grade3 || ""
                     },
                     success: function (response) {
+                        console.log("Success response:", response);
                         completed++;
                         if (completed === moduleIds.length) {
                             alert("Alle Noten gespeichert!");
                             location.reload();
                         }
                     },
-                    error: function () {
-                        alert("Fehler beim Speichern!");
+                    error: function (xhr, status, error) {
+                        console.log("Error:", xhr.status, xhr.responseText);
+                        alert("Fehler: " + xhr.responseText);
                     }
                 });
             });
