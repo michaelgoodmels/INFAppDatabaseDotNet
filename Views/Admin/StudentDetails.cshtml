@@ -73,6 +73,10 @@
                                         <tr>
                                             <td>
                                                 <strong>@module.ModuleName</strong>
+                                                @if (module.ModuleAverageGrade.HasValue)
+                                                {
+                                                    <br /><small style="color: #7dd3c0;">Ø @module.ModuleAverageGrade.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture)</small>
+                                                }
                                             </td>
                                             <td>
                                                 <span class="badge badge-secondary">@module.ModuleCode</span>

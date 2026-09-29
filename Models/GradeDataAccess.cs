@@ -311,6 +311,20 @@ namespace INFAppDatabaseDotNet.Models
                             System.Diagnostics.Debug.WriteLine($"[Load Module {module.ModuleId}] NO DATA");
                         }
 
+                        // Calculate module average
+                        decimal? moduleAvg = null;
+                        int gradeCount = 0;
+                        decimal gradeSum = 0;
+
+                        if (grade1.HasValue) { gradeSum += grade1.Value; gradeCount++; }
+                        if (grade2.HasValue) { gradeSum += grade2.Value; gradeCount++; }
+                        if (grade3.HasValue) { gradeSum += grade3.Value; gradeCount++; }
+
+                        if (gradeCount > 0)
+                        {
+                            moduleAvg = Math.Round(gradeSum / gradeCount, 1);
+                        }
+
                         yearViewModel.Modules.Add(new StudentGradeViewModel
                         {
                             GradeId = gradeId,
@@ -319,7 +333,8 @@ namespace INFAppDatabaseDotNet.Models
                             ModuleCode = module.ModuleCode,
                             GradeValue = grade1,
                             Grade2 = grade2,
-                            Grade3 = grade3
+                            Grade3 = grade3,
+                            ModuleAverageGrade = moduleAvg
                         });
                     }
 

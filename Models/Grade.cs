@@ -37,6 +37,7 @@ namespace INFAppDatabaseDotNet.Models
         public decimal? GradeValue { get; set; }
         public decimal? Grade2 { get; set; }
         public decimal? Grade3 { get; set; }
+        public decimal? ModuleAverageGrade { get; set; }
     }
 
     public class StudentModulesViewModel
