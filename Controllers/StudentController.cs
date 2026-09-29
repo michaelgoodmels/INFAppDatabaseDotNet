@@ -30,6 +30,9 @@ namespace INFAppDatabaseDotNet.Controllers
             base.OnActionExecuting(filterContext);
         }
 
+        /// <summary>
+        /// Zeigt das Student-Dashboard mit allen Modulen und deren Noten
+        /// </summary>
         public IActionResult Dashboard()
         {
             try
@@ -42,6 +45,7 @@ namespace INFAppDatabaseDotNet.Controllers
                     return NotFound();
                 }
 
+                // Lade alle Module und Noten des Schülers
                 StudentModulesViewModel viewModel = _gradeDA.GetStudentModulesViewModel(student.StudentId);
                 return View(viewModel);
             }
@@ -52,6 +56,9 @@ namespace INFAppDatabaseDotNet.Controllers
             }
         }
 
+        /// <summary>
+        /// Speichert 3 Noten für ein Modul und gibt den aktualisierten Durchschnitt zurück
+        /// </summary>
         [HttpPost]
         public IActionResult SaveGrades(int moduleId, string grade1, string grade2, string grade3)
         {
@@ -65,7 +72,7 @@ namespace INFAppDatabaseDotNet.Controllers
                     return Json(new { success = false, message = "Schüler nicht gefunden." });
                 }
 
-                // Konvertiere und validiere Noten
+                // Parse und validiere alle 3 Noten (1.0-6.0)
                 decimal? parsedGrade1 = null;
                 decimal? parsedGrade2 = null;
                 decimal? parsedGrade3 = null;
@@ -88,7 +95,7 @@ namespace INFAppDatabaseDotNet.Controllers
                     else return Json(new { success = false, message = "Note 3 ungültig (1.0-6.0)" });
                 }
 
-                // Mindestens eine Note muss vorhanden sein
+                // Validierung: Mindestens eine Note erforderlich
                 if (parsedGrade1 == null && parsedGrade2 == null && parsedGrade3 == null)
                 {
                     return Json(new { success = false, message = "Mindestens eine Note muss eingegeben werden." });

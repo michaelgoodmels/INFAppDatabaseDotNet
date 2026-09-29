@@ -13,6 +13,9 @@ namespace INFAppDatabaseDotNet.Models
         /// <summary>
         /// Ruft alle Noten eines SchÃ¼lers ab
         /// </summary>
+        /// <summary>
+        /// Ruft alle Noten eines Schülers ab, inklusive aller 3 Noten pro Modul
+        /// </summary>
         public List<Grade> GetStudentGrades(int studentId)
         {
             try
@@ -116,6 +119,9 @@ namespace INFAppDatabaseDotNet.Models
         /// <summary>
         /// Speichert oder aktualisiert 3 Noten pro Modul
         /// </summary>
+        /// <summary>
+        /// Speichert oder aktualisiert 3 Noten pro Modul für einen Schüler
+        /// </summary>
         public int SaveMultipleGrades(int studentId, int moduleId, decimal? grade1, decimal? grade2, decimal? grade3)
         {
             try
@@ -124,7 +130,7 @@ namespace INFAppDatabaseDotNet.Models
 
                 if (existingGrade != null)
                 {
-                    // Update existing grade
+                    // Aktualisiere existierende Noten
                     string updateQuery = "UPDATE StudentGrades SET Grade = @Grade1, Grade2 = @Grade2, Grade3 = @Grade3, UpdatedAt = GETDATE() WHERE StudentId = @StudentId AND ModuleId = @ModuleId";
 
                     ExecuteNonQuery(updateQuery,
@@ -139,7 +145,7 @@ namespace INFAppDatabaseDotNet.Models
                 }
                 else
                 {
-                    // Insert new grade
+                    // Füge neue Noten ein
                     string insertQuery = "INSERT INTO StudentGrades (StudentId, ModuleId, Grade, Grade2, Grade3, EnteredAt, UpdatedAt) VALUES (@StudentId, @ModuleId, @Grade1, @Grade2, @Grade3, GETDATE(), GETDATE()); SELECT SCOPE_IDENTITY();";
 
                     object result = ExecuteScalar(insertQuery,
@@ -181,6 +187,9 @@ namespace INFAppDatabaseDotNet.Models
 
         /// <summary>
         /// Berechnet den Durchschnitt fÃ¼r einen SchÃ¼ler (alle 3 Noten pro Modul)
+        /// </summary>
+        /// <summary>
+        /// Berechnet den Gesamtdurchschnitt für einen Schüler aus allen 3 Noten pro Modul
         /// </summary>
         public decimal GetStudentAverageGrade(int studentId)
         {

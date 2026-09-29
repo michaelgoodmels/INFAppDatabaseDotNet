@@ -79,12 +79,15 @@ namespace INFAppDatabaseDotNet.Controllers
             }
         }
 
+        /// <summary>
+        /// Admin-Endpunkt zum Bearbeiten von Schülernoten (3 Noten pro Modul)
+        /// </summary>
         [HttpPost]
         public IActionResult EditGrades(int studentId, int moduleId, string grade1, string grade2, string grade3)
         {
             try
             {
-                // Konvertiere und validiere Noten
+                // Parse und validiere alle 3 Noten
                 decimal? parsedGrade1 = null;
                 decimal? parsedGrade2 = null;
                 decimal? parsedGrade3 = null;
@@ -107,7 +110,7 @@ namespace INFAppDatabaseDotNet.Controllers
                     else return Json(new { success = false, message = "Note 3 ungültig (1.0-6.0)" });
                 }
 
-                // Mindestens eine Note muss vorhanden sein
+                // Validierung: Mindestens eine Note erforderlich
                 if (parsedGrade1 == null && parsedGrade2 == null && parsedGrade3 == null)
                 {
                     return Json(new { success = false, message = "Mindestens eine Note muss eingegeben werden." });
