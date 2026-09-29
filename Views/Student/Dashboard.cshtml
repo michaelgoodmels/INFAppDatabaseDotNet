@@ -86,7 +86,7 @@
                                                        min="1.0"
                                                        max="6.0"
                                                        placeholder="Note 1"
-                                                       value="@(module.GradeValue.HasValue ? module.GradeValue.Value.ToString("F1") : "")"
+                                                       value="@(module.GradeValue.HasValue ? module.GradeValue.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) : "")"
                                                        style="flex: 1;" />
                                                 <input type="number"
                                                        class="grade-input form-control grade-input-2"
@@ -96,7 +96,7 @@
                                                        min="1.0"
                                                        max="6.0"
                                                        placeholder="Note 2"
-                                                       value="@(module.Grade2.HasValue ? module.Grade2.Value.ToString("F1") : "")"
+                                                       value="@(module.Grade2.HasValue ? module.Grade2.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) : "")"
                                                        style="flex: 1;" />
                                                 <input type="number"
                                                        class="grade-input form-control grade-input-3"
@@ -106,7 +106,7 @@
                                                        min="1.0"
                                                        max="6.0"
                                                        placeholder="Note 3"
-                                                       value="@(module.Grade3.HasValue ? module.Grade3.Value.ToString("F1") : "")"
+                                                       value="@(module.Grade3.HasValue ? module.Grade3.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) : "")"
                                                        style="flex: 1;" />
                                             </td>
                                         </tr>

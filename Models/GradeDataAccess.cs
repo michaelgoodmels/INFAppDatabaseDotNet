@@ -303,6 +303,12 @@ namespace INFAppDatabaseDotNet.Models
                             grade1 = row["Grade"] != DBNull.Value ? (decimal?)row["Grade"] : null;
                             grade2 = row["Grade2"] != DBNull.Value ? (decimal?)row["Grade2"] : null;
                             grade3 = row["Grade3"] != DBNull.Value ? (decimal?)row["Grade3"] : null;
+
+                            System.Diagnostics.Debug.WriteLine($"[Load Module {module.ModuleId}] G1={grade1}, G2={grade2}, G3={grade3}");
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine($"[Load Module {module.ModuleId}] NO DATA");
                         }
 
                         yearViewModel.Modules.Add(new StudentGradeViewModel
