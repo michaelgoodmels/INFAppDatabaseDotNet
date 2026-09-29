@@ -15,6 +15,10 @@ namespace INFAppDatabaseDotNet.Models
         [Range(1.0, 6.0, ErrorMessage = "Note muss zwischen 1.0 und 6.0 liegen")]
         public decimal? GradeValue { get; set; }
 
+        public decimal? Grade2Value { get; set; }
+
+        public decimal? Grade3Value { get; set; }
+
         public DateTime EnteredAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }
@@ -31,6 +35,8 @@ namespace INFAppDatabaseDotNet.Models
         public string ModuleName { get; set; }
         public string ModuleCode { get; set; }
         public decimal? GradeValue { get; set; }
+        public decimal? Grade2 { get; set; }
+        public decimal? Grade3 { get; set; }
     }
 
     public class StudentModulesViewModel

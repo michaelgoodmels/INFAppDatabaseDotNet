@@ -46,7 +46,7 @@ namespace INFAppDatabaseDotNet.Models
             try
             {
                 string query = @"
-                    SELECT GradeId, StudentId, ModuleId, Grade, EnteredAt, UpdatedAt
+                    SELECT GradeId, StudentId, ModuleId, Grade, Grade2, Grade3, EnteredAt, UpdatedAt
                     FROM StudentGrades
                     WHERE StudentId = @StudentId AND ModuleId = @ModuleId";
 
@@ -296,7 +296,9 @@ namespace INFAppDatabaseDotNet.Models
                             ModuleId = module.ModuleId,
                             ModuleName = module.ModuleName,
                             ModuleCode = module.ModuleCode,
-                            GradeValue = grade?.GradeValue
+                            GradeValue = grade?.GradeValue,
+                            Grade2 = grade?.Grade2Value,
+                            Grade3 = grade?.Grade3Value
                         });
                     }
 
@@ -354,6 +356,8 @@ namespace INFAppDatabaseDotNet.Models
                 StudentId = (int)row["StudentId"],
                 ModuleId = (int)row["ModuleId"],
                 GradeValue = row["Grade"] != DBNull.Value ? (decimal?)row["Grade"] : null,
+                Grade2Value = row.Table.Columns.Contains("Grade2") && row["Grade2"] != DBNull.Value ? (decimal?)row["Grade2"] : null,
+                Grade3Value = row.Table.Columns.Contains("Grade3") && row["Grade3"] != DBNull.Value ? (decimal?)row["Grade3"] : null,
                 EnteredAt = (DateTime)row["EnteredAt"],
                 UpdatedAt = (DateTime)row["UpdatedAt"]
             };
