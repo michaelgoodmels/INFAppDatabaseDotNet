@@ -288,17 +288,32 @@ namespace INFAppDatabaseDotNet.Models
 
                     foreach (Module module in modules)
                     {
-                        Grade grade = GetStudentGrade(studentId, module.ModuleId);
+                        string gradeQuery = "SELECT GradeId, Grade, Grade2, Grade3 FROM StudentGrades WHERE StudentId = @StudentId AND ModuleId = @ModuleId";
+                        DataTable gradeTable = ExecuteQuery(gradeQuery,
+                            new SqlParameter("@StudentId", studentId),
+                            new SqlParameter("@ModuleId", module.ModuleId));
+
+                        decimal? grade1 = null, grade2 = null, grade3 = null;
+                        int gradeId = 0;
+
+                        if (gradeTable.Rows.Count > 0)
+                        {
+                            DataRow row = gradeTable.Rows[0];
+                            gradeId = (int)row["GradeId"];
+                            grade1 = row["Grade"] != DBNull.Value ? (decimal?)row["Grade"] : null;
+                            grade2 = row["Grade2"] != DBNull.Value ? (decimal?)row["Grade2"] : null;
+                            grade3 = row["Grade3"] != DBNull.Value ? (decimal?)row["Grade3"] : null;
+                        }
 
                         yearViewModel.Modules.Add(new StudentGradeViewModel
                         {
-                            GradeId = grade?.GradeId ?? 0,
+                            GradeId = gradeId,
                             ModuleId = module.ModuleId,
                             ModuleName = module.ModuleName,
                             ModuleCode = module.ModuleCode,
-                            GradeValue = grade?.GradeValue,
-                            Grade2 = grade?.Grade2Value,
-                            Grade3 = grade?.Grade3Value
+                            GradeValue = grade1,
+                            Grade2 = grade2,
+                            Grade3 = grade3
                         });
                     }
 
