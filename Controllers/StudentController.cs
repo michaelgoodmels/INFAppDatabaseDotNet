@@ -60,7 +60,7 @@ namespace INFAppDatabaseDotNet.Controllers
         /// Speichert 3 Noten für ein Modul und gibt den aktualisierten Durchschnitt zurück
         /// </summary>
         [HttpPost]
-        public IActionResult SaveGrades(int moduleId, string grade1, string grade2, string grade3)
+        public IActionResult SaveGrades(int moduleId, string grade1, string grade2, string grade3, string grade4 = "", string grade5 = "")
         {
             try
             {
@@ -72,36 +72,28 @@ namespace INFAppDatabaseDotNet.Controllers
                     return Json(new { success = false, message = "Schüler nicht gefunden." });
                 }
 
-                // Parse und validiere alle 3 Noten (1.0-6.0)
-                decimal? parsedGrade1 = null;
-                decimal? parsedGrade2 = null;
-                decimal? parsedGrade3 = null;
+                // Parse und validiere alle Noten (1.0-6.0)
+                decimal? parsedGrade1 = null, parsedGrade2 = null, parsedGrade3 = null, parsedGrade4 = null, parsedGrade5 = null;
 
-                if (!string.IsNullOrEmpty(grade1) && decimal.TryParse(grade1.Replace(",", "."), out decimal g1))
-                {
-                    if (g1 >= 1.0m && g1 <= 6.0m) parsedGrade1 = g1;
-                    else return Json(new { success = false, message = "Note 1 ungültig (1.0-6.0)" });
-                }
+                if (!string.IsNullOrEmpty(grade1) && decimal.TryParse(grade1.Replace(",", "."), out decimal g1) && g1 >= 1.0m && g1 <= 6.0m) parsedGrade1 = g1;
+                else if (!string.IsNullOrEmpty(grade1)) return Json(new { success = false, message = "Note ungültig" });
 
-                if (!string.IsNullOrEmpty(grade2) && decimal.TryParse(grade2.Replace(",", "."), out decimal g2))
-                {
-                    if (g2 >= 1.0m && g2 <= 6.0m) parsedGrade2 = g2;
-                    else return Json(new { success = false, message = "Note 2 ungültig (1.0-6.0)" });
-                }
+                if (!string.IsNullOrEmpty(grade2) && decimal.TryParse(grade2.Replace(",", "."), out decimal g2) && g2 >= 1.0m && g2 <= 6.0m) parsedGrade2 = g2;
+                else if (!string.IsNullOrEmpty(grade2)) return Json(new { success = false, message = "Note ungültig" });
 
-                if (!string.IsNullOrEmpty(grade3) && decimal.TryParse(grade3.Replace(",", "."), out decimal g3))
-                {
-                    if (g3 >= 1.0m && g3 <= 6.0m) parsedGrade3 = g3;
-                    else return Json(new { success = false, message = "Note 3 ungültig (1.0-6.0)" });
-                }
+                if (!string.IsNullOrEmpty(grade3) && decimal.TryParse(grade3.Replace(",", "."), out decimal g3) && g3 >= 1.0m && g3 <= 6.0m) parsedGrade3 = g3;
+                else if (!string.IsNullOrEmpty(grade3)) return Json(new { success = false, message = "Note ungültig" });
 
-                // Validierung: Mindestens eine Note erforderlich
-                if (parsedGrade1 == null && parsedGrade2 == null && parsedGrade3 == null)
-                {
-                    return Json(new { success = false, message = "Mindestens eine Note muss eingegeben werden." });
-                }
+                if (!string.IsNullOrEmpty(grade4) && decimal.TryParse(grade4.Replace(",", "."), out decimal g4) && g4 >= 1.0m && g4 <= 6.0m) parsedGrade4 = g4;
+                else if (!string.IsNullOrEmpty(grade4)) return Json(new { success = false, message = "Note ungültig" });
 
-                _gradeDA.SaveMultipleGrades(student.StudentId, moduleId, parsedGrade1, parsedGrade2, parsedGrade3);
+                if (!string.IsNullOrEmpty(grade5) && decimal.TryParse(grade5.Replace(",", "."), out decimal g5) && g5 >= 1.0m && g5 <= 6.0m) parsedGrade5 = g5;
+                else if (!string.IsNullOrEmpty(grade5)) return Json(new { success = false, message = "Note ungültig" });
+
+                if (parsedGrade1 == null && parsedGrade2 == null && parsedGrade3 == null && parsedGrade4 == null && parsedGrade5 == null)
+                    return Json(new { success = false, message = "Mindestens eine Note erforderlich" });
+
+                _gradeDA.SaveMultipleGrades(student.StudentId, moduleId, parsedGrade1, parsedGrade2, parsedGrade3, parsedGrade4, parsedGrade5);
 
                 StudentModulesViewModel viewModel = _gradeDA.GetStudentModulesViewModel(student.StudentId);
                 System.Diagnostics.Debug.WriteLine($"[SaveGrades] Returning average: {viewModel.AverageGrade}");

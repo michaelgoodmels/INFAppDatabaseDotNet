@@ -83,40 +83,31 @@ namespace INFAppDatabaseDotNet.Controllers
         /// Admin-Endpunkt zum Bearbeiten von Schülernoten (3 Noten pro Modul)
         /// </summary>
         [HttpPost]
-        public IActionResult EditGrades(int studentId, int moduleId, string grade1, string grade2, string grade3)
+        public IActionResult EditGrades(int studentId, int moduleId, string grade1, string grade2, string grade3, string grade4 = "", string grade5 = "")
         {
             try
             {
-                // Parse und validiere alle 3 Noten
-                decimal? parsedGrade1 = null;
-                decimal? parsedGrade2 = null;
-                decimal? parsedGrade3 = null;
+                decimal? p1 = null, p2 = null, p3 = null, p4 = null, p5 = null;
 
-                if (!string.IsNullOrEmpty(grade1) && decimal.TryParse(grade1.Replace(",", "."), out decimal g1))
-                {
-                    if (g1 >= 1.0m && g1 <= 6.0m) parsedGrade1 = g1;
-                    else return Json(new { success = false, message = "Note 1 ungültig (1.0-6.0)" });
-                }
+                if (!string.IsNullOrEmpty(grade1) && decimal.TryParse(grade1.Replace(",", "."), out decimal g1) && g1 >= 1.0m && g1 <= 6.0m) p1 = g1;
+                else if (!string.IsNullOrEmpty(grade1)) return Json(new { success = false, message = "Note ungültig" });
 
-                if (!string.IsNullOrEmpty(grade2) && decimal.TryParse(grade2.Replace(",", "."), out decimal g2))
-                {
-                    if (g2 >= 1.0m && g2 <= 6.0m) parsedGrade2 = g2;
-                    else return Json(new { success = false, message = "Note 2 ungültig (1.0-6.0)" });
-                }
+                if (!string.IsNullOrEmpty(grade2) && decimal.TryParse(grade2.Replace(",", "."), out decimal g2) && g2 >= 1.0m && g2 <= 6.0m) p2 = g2;
+                else if (!string.IsNullOrEmpty(grade2)) return Json(new { success = false, message = "Note ungültig" });
 
-                if (!string.IsNullOrEmpty(grade3) && decimal.TryParse(grade3.Replace(",", "."), out decimal g3))
-                {
-                    if (g3 >= 1.0m && g3 <= 6.0m) parsedGrade3 = g3;
-                    else return Json(new { success = false, message = "Note 3 ungültig (1.0-6.0)" });
-                }
+                if (!string.IsNullOrEmpty(grade3) && decimal.TryParse(grade3.Replace(",", "."), out decimal g3) && g3 >= 1.0m && g3 <= 6.0m) p3 = g3;
+                else if (!string.IsNullOrEmpty(grade3)) return Json(new { success = false, message = "Note ungültig" });
 
-                // Validierung: Mindestens eine Note erforderlich
-                if (parsedGrade1 == null && parsedGrade2 == null && parsedGrade3 == null)
-                {
-                    return Json(new { success = false, message = "Mindestens eine Note muss eingegeben werden." });
-                }
+                if (!string.IsNullOrEmpty(grade4) && decimal.TryParse(grade4.Replace(",", "."), out decimal g4) && g4 >= 1.0m && g4 <= 6.0m) p4 = g4;
+                else if (!string.IsNullOrEmpty(grade4)) return Json(new { success = false, message = "Note ungültig" });
 
-                _gradeDA.SaveMultipleGrades(studentId, moduleId, parsedGrade1, parsedGrade2, parsedGrade3);
+                if (!string.IsNullOrEmpty(grade5) && decimal.TryParse(grade5.Replace(",", "."), out decimal g5) && g5 >= 1.0m && g5 <= 6.0m) p5 = g5;
+                else if (!string.IsNullOrEmpty(grade5)) return Json(new { success = false, message = "Note ungültig" });
+
+                if (p1 == null && p2 == null && p3 == null && p4 == null && p5 == null)
+                    return Json(new { success = false, message = "Mindestens eine Note erforderlich" });
+
+                _gradeDA.SaveMultipleGrades(studentId, moduleId, p1, p2, p3, p4, p5);
 
                 StudentModulesViewModel viewModel = _gradeDA.GetStudentModulesViewModel(studentId);
                 return Json(new { success = true, averageGrade = viewModel.AverageGrade });

@@ -122,7 +122,7 @@ namespace INFAppDatabaseDotNet.Models
         /// <summary>
         /// Speichert oder aktualisiert 3 Noten pro Modul für einen Schüler
         /// </summary>
-        public int SaveMultipleGrades(int studentId, int moduleId, decimal? grade1, decimal? grade2, decimal? grade3)
+        public int SaveMultipleGrades(int studentId, int moduleId, decimal? grade1, decimal? grade2, decimal? grade3, decimal? grade4 = null, decimal? grade5 = null)
         {
             try
             {
@@ -130,30 +130,30 @@ namespace INFAppDatabaseDotNet.Models
 
                 if (existingGrade != null)
                 {
-                    // Aktualisiere existierende Noten
-                    string updateQuery = "UPDATE StudentGrades SET Grade = @Grade1, Grade2 = @Grade2, Grade3 = @Grade3, UpdatedAt = GETDATE() WHERE StudentId = @StudentId AND ModuleId = @ModuleId";
-
+                    string updateQuery = "UPDATE StudentGrades SET Grade = @Grade1, Grade2 = @Grade2, Grade3 = @Grade3, Grade4 = @Grade4, Grade5 = @Grade5, UpdatedAt = GETDATE() WHERE StudentId = @StudentId AND ModuleId = @ModuleId";
                     ExecuteNonQuery(updateQuery,
                         new SqlParameter("@StudentId", studentId),
                         new SqlParameter("@ModuleId", moduleId),
                         new SqlParameter("@Grade1", grade1 ?? (object)DBNull.Value),
                         new SqlParameter("@Grade2", grade2 ?? (object)DBNull.Value),
-                        new SqlParameter("@Grade3", grade3 ?? (object)DBNull.Value));
+                        new SqlParameter("@Grade3", grade3 ?? (object)DBNull.Value),
+                        new SqlParameter("@Grade4", grade4 ?? (object)DBNull.Value),
+                        new SqlParameter("@Grade5", grade5 ?? (object)DBNull.Value));
 
                     System.Diagnostics.Debug.WriteLine($"[GradeDA] Updated grades for Student {studentId}, Module {moduleId}: {grade1}, {grade2}, {grade3}");
                     return existingGrade.GradeId;
                 }
                 else
                 {
-                    // Füge neue Noten ein
-                    string insertQuery = "INSERT INTO StudentGrades (StudentId, ModuleId, Grade, Grade2, Grade3, EnteredAt, UpdatedAt) VALUES (@StudentId, @ModuleId, @Grade1, @Grade2, @Grade3, GETDATE(), GETDATE()); SELECT SCOPE_IDENTITY();";
-
+                    string insertQuery = "INSERT INTO StudentGrades (StudentId, ModuleId, Grade, Grade2, Grade3, Grade4, Grade5, EnteredAt, UpdatedAt) VALUES (@StudentId, @ModuleId, @Grade1, @Grade2, @Grade3, @Grade4, @Grade5, GETDATE(), GETDATE()); SELECT SCOPE_IDENTITY();";
                     object result = ExecuteScalar(insertQuery,
                         new SqlParameter("@StudentId", studentId),
                         new SqlParameter("@ModuleId", moduleId),
                         new SqlParameter("@Grade1", grade1 ?? (object)DBNull.Value),
                         new SqlParameter("@Grade2", grade2 ?? (object)DBNull.Value),
-                        new SqlParameter("@Grade3", grade3 ?? (object)DBNull.Value));
+                        new SqlParameter("@Grade3", grade3 ?? (object)DBNull.Value),
+                        new SqlParameter("@Grade4", grade4 ?? (object)DBNull.Value),
+                        new SqlParameter("@Grade5", grade5 ?? (object)DBNull.Value));
 
                     System.Diagnostics.Debug.WriteLine($"[GradeDA] Inserted grades for Student {studentId}, Module {moduleId}: {grade1}, {grade2}, {grade3}");
                     return Convert.ToInt32(result);
@@ -297,7 +297,7 @@ namespace INFAppDatabaseDotNet.Models
 
                     foreach (Module module in modules)
                     {
-                        string gradeQuery = "SELECT GradeId, Grade, Grade2, Grade3 FROM StudentGrades WHERE StudentId = @StudentId AND ModuleId = @ModuleId";
+                        string gradeQuery = "SELECT GradeId, Grade, Grade2, Grade3, Grade4, Grade5 FROM StudentGrades WHERE StudentId = @StudentId AND ModuleId = @ModuleId";
                         DataTable gradeTable = ExecuteQuery(gradeQuery,
                             new SqlParameter("@StudentId", studentId),
                             new SqlParameter("@ModuleId", module.ModuleId));
@@ -343,6 +343,8 @@ namespace INFAppDatabaseDotNet.Models
                             GradeValue = grade1,
                             Grade2 = grade2,
                             Grade3 = grade3,
+                            Grade4 = grade4,
+                            Grade5 = grade5,
                             ModuleAverageGrade = moduleAvg
                         });
                     }

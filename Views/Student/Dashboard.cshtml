@@ -81,37 +81,14 @@
                                             <td>
                                                 <span class="badge badge-secondary">@module.ModuleCode</span>
                                             </td>
-                                            <td style="display: flex; gap: 5px;">
-                                                <input type="number"
-                                                       class="grade-input form-control grade-input-1"
-                                                       data-module-id="@module.ModuleId"
-                                                       data-grade-num="1"
-                                                       step="0.1"
-                                                       min="1.0"
-                                                       max="6.0"
-                                                       placeholder="Note 1"
-                                                       value="@(module.GradeValue.HasValue ? module.GradeValue.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) : "")"
-                                                       style="flex: 1;" />
-                                                <input type="number"
-                                                       class="grade-input form-control grade-input-2"
-                                                       data-module-id="@module.ModuleId"
-                                                       data-grade-num="2"
-                                                       step="0.1"
-                                                       min="1.0"
-                                                       max="6.0"
-                                                       placeholder="Note 2"
-                                                       value="@(module.Grade2.HasValue ? module.Grade2.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) : "")"
-                                                       style="flex: 1;" />
-                                                <input type="number"
-                                                       class="grade-input form-control grade-input-3"
-                                                       data-module-id="@module.ModuleId"
-                                                       data-grade-num="3"
-                                                       step="0.1"
-                                                       min="1.0"
-                                                       max="6.0"
-                                                       placeholder="Note 3"
-                                                       value="@(module.Grade3.HasValue ? module.Grade3.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) : "")"
-                                                       style="flex: 1;" />
+                                            <td style="display: flex; gap: 5px; align-items: center;">
+                                                <div style="display: flex; gap: 5px; flex: 1;">
+                                                    <input type="number" class="grade-input form-control" data-module-id="@module.ModuleId" data-grade-num="1" step="0.1" min="1.0" max="6.0" placeholder="1" value="@(module.GradeValue.HasValue ? module.GradeValue.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) : "")" style="flex: 1;" />
+                                                    <input type="number" class="grade-input form-control" data-module-id="@module.ModuleId" data-grade-num="2" step="0.1" min="1.0" max="6.0" placeholder="2" value="@(module.Grade2.HasValue ? module.Grade2.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) : "")" style="flex: 1;" />
+                                                    <input type="number" class="grade-input form-control" data-module-id="@module.ModuleId" data-grade-num="3" step="0.1" min="1.0" max="6.0" placeholder="3" value="@(module.Grade3.HasValue ? module.Grade3.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) : "")" style="flex: 1;" />
+                                                    <input type="number" class="grade-input form-control" data-module-id="@module.ModuleId" data-grade-num="4" step="0.1" min="1.0" max="6.0" placeholder="4" value="@(module.Grade4.HasValue ? module.Grade4.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) : "")" style="flex: 1;" />
+                                                    <input type="number" class="grade-input form-control" data-module-id="@module.ModuleId" data-grade-num="5" step="0.1" min="1.0" max="6.0" placeholder="5" value="@(module.Grade5.HasValue ? module.Grade5.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) : "")" style="flex: 1;" />
+                                                </div>
                                             </td>
                                         </tr>
                                     }
