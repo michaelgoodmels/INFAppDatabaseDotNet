@@ -302,7 +302,7 @@ namespace INFAppDatabaseDotNet.Models
                             new SqlParameter("@StudentId", studentId),
                             new SqlParameter("@ModuleId", module.ModuleId));
 
-                        decimal? grade1 = null, grade2 = null, grade3 = null;
+                        decimal? grade1 = null, grade2 = null, grade3 = null, grade4 = null, grade5 = null;
                         int gradeId = 0;
 
                         if (gradeTable.Rows.Count > 0)
@@ -312,6 +312,8 @@ namespace INFAppDatabaseDotNet.Models
                             grade1 = row["Grade"] != DBNull.Value ? (decimal?)row["Grade"] : null;
                             grade2 = row["Grade2"] != DBNull.Value ? (decimal?)row["Grade2"] : null;
                             grade3 = row["Grade3"] != DBNull.Value ? (decimal?)row["Grade3"] : null;
+                            grade4 = row.Table.Columns.Contains("Grade4") && row["Grade4"] != DBNull.Value ? (decimal?)row["Grade4"] : null;
+                            grade5 = row.Table.Columns.Contains("Grade5") && row["Grade5"] != DBNull.Value ? (decimal?)row["Grade5"] : null;
 
                             System.Diagnostics.Debug.WriteLine($"[Load Module {module.ModuleId}] G1={grade1}, G2={grade2}, G3={grade3}");
                         }
@@ -328,6 +330,8 @@ namespace INFAppDatabaseDotNet.Models
                         if (grade1.HasValue) { gradeSum += grade1.Value; gradeCount++; }
                         if (grade2.HasValue) { gradeSum += grade2.Value; gradeCount++; }
                         if (grade3.HasValue) { gradeSum += grade3.Value; gradeCount++; }
+                        if (grade4.HasValue && module.GradeCount >= 4) { gradeSum += grade4.Value; gradeCount++; }
+                        if (grade5.HasValue && module.GradeCount >= 5) { gradeSum += grade5.Value; gradeCount++; }
 
                         if (gradeCount > 0)
                         {
@@ -340,6 +344,7 @@ namespace INFAppDatabaseDotNet.Models
                             ModuleId = module.ModuleId,
                             ModuleName = module.ModuleName,
                             ModuleCode = module.ModuleCode,
+                            GradeCount = module.GradeCount,
                             GradeValue = grade1,
                             Grade2 = grade2,
                             Grade3 = grade3,

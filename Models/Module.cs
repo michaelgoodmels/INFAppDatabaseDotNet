@@ -19,6 +19,8 @@ namespace INFAppDatabaseDotNet.Models
         [StringLength(500)]
         public string Description { get; set; }
 
+        public int GradeCount { get; set; } = 3;
+
         // Navigation Properties
         public virtual SchoolYear SchoolYear { get; set; }
     }

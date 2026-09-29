@@ -84,10 +84,22 @@
                                             <td style="display: flex; gap: 5px; align-items: center;">
                                                 <div style="display: flex; gap: 5px; flex: 1;">
                                                     <input type="number" class="grade-input form-control admin-grade-input" data-module-id="@module.ModuleId" data-grade-num="1" step="0.1" min="1.0" max="6.0" placeholder="1" value="@(module.GradeValue.HasValue ? module.GradeValue.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) : "")" style="flex: 1;" />
-                                                    <input type="number" class="grade-input form-control admin-grade-input" data-module-id="@module.ModuleId" data-grade-num="2" step="0.1" min="1.0" max="6.0" placeholder="2" value="@(module.Grade2.HasValue ? module.Grade2.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) : "")" style="flex: 1;" />
-                                                    <input type="number" class="grade-input form-control admin-grade-input" data-module-id="@module.ModuleId" data-grade-num="3" step="0.1" min="1.0" max="6.0" placeholder="3" value="@(module.Grade3.HasValue ? module.Grade3.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) : "")" style="flex: 1;" />
-                                                    <input type="number" class="grade-input form-control admin-grade-input" data-module-id="@module.ModuleId" data-grade-num="4" step="0.1" min="1.0" max="6.0" placeholder="4" value="@(module.Grade4.HasValue ? module.Grade4.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) : "")" style="flex: 1;" />
-                                                    <input type="number" class="grade-input form-control admin-grade-input" data-module-id="@module.ModuleId" data-grade-num="5" step="0.1" min="1.0" max="6.0" placeholder="5" value="@(module.Grade5.HasValue ? module.Grade5.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) : "")" style="flex: 1;" />
+                                                    @if (module.GradeCount >= 2)
+                                                    {
+                                                        <input type="number" class="grade-input form-control admin-grade-input" data-module-id="@module.ModuleId" data-grade-num="2" step="0.1" min="1.0" max="6.0" placeholder="2" value="@(module.Grade2.HasValue ? module.Grade2.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) : "")" style="flex: 1;" />
+                                                    }
+                                                    @if (module.GradeCount >= 3)
+                                                    {
+                                                        <input type="number" class="grade-input form-control admin-grade-input" data-module-id="@module.ModuleId" data-grade-num="3" step="0.1" min="1.0" max="6.0" placeholder="3" value="@(module.Grade3.HasValue ? module.Grade3.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) : "")" style="flex: 1;" />
+                                                    }
+                                                    @if (module.GradeCount >= 4)
+                                                    {
+                                                        <input type="number" class="grade-input form-control admin-grade-input" data-module-id="@module.ModuleId" data-grade-num="4" step="0.1" min="1.0" max="6.0" placeholder="4" value="@(module.Grade4.HasValue ? module.Grade4.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) : "")" style="flex: 1;" />
+                                                    }
+                                                    @if (module.GradeCount >= 5)
+                                                    {
+                                                        <input type="number" class="grade-input form-control admin-grade-input" data-module-id="@module.ModuleId" data-grade-num="5" step="0.1" min="1.0" max="6.0" placeholder="5" value="@(module.Grade5.HasValue ? module.Grade5.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) : "")" style="flex: 1;" />
+                                                    }
                                                 </div>
                                             </td>
                                         </tr>
@@ -172,7 +184,9 @@
                         moduleId: moduleId,
                         grade1: grades.grade1 || "",
                         grade2: grades.grade2 || "",
-                        grade3: grades.grade3 || ""
+                        grade3: grades.grade3 || "",
+                        grade4: grades.grade4 || "",
+                        grade5: grades.grade5 || ""
                     },
                     success: function (response) {
                         console.log("Success response:", response);

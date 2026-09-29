@@ -41,6 +41,63 @@ namespace INFAppDatabaseDotNet.Models
             }
         }
 
+        public bool UpdateModuleGradeCount(int moduleId, int gradeCount)
+        {
+            try
+            {
+                if (gradeCount < 1 || gradeCount > 5)
+                    throw new Exception("Notenanzahl muss zwischen 1 und 5 liegen");
+
+                // Get current GradeCount to check if we need to clean up grades
+                string selectQuery = "SELECT GradeCount FROM Modules WHERE ModuleId = @ModuleId";
+                object result = ExecuteScalar(selectQuery, new SqlParameter("@ModuleId", moduleId));
+                int currentGradeCount = result != null ? Convert.ToInt32(result) : 3;
+
+                // Update the module
+                string updateModuleQuery = @"
+                    UPDATE Modules
+                    SET GradeCount = @GradeCount
+                    WHERE ModuleId = @ModuleId";
+
+                ExecuteNonQuery(updateModuleQuery,
+                    new SqlParameter("@ModuleId", moduleId),
+                    new SqlParameter("@GradeCount", gradeCount));
+
+                // If GradeCount is reduced, clear the extra grades for all students
+                if (gradeCount < currentGradeCount)
+                {
+                    string cleanupQuery = "UPDATE StudentGrades SET ";
+                    List<string> updateStatements = new List<string>();
+                    List<SqlParameter> parameters = new List<SqlParameter>();
+
+                    // Add NULL assignments for grades that exceed the new count
+                    if (gradeCount < 5 && currentGradeCount >= 5)
+                        updateStatements.Add("Grade5 = NULL");
+                    if (gradeCount < 4 && currentGradeCount >= 4)
+                        updateStatements.Add("Grade4 = NULL");
+                    if (gradeCount < 3 && currentGradeCount >= 3)
+                        updateStatements.Add("Grade3 = NULL");
+                    if (gradeCount < 2 && currentGradeCount >= 2)
+                        updateStatements.Add("Grade2 = NULL");
+
+                    if (updateStatements.Count > 0)
+                    {
+                        cleanupQuery += string.Join(", ", updateStatements);
+                        cleanupQuery += " WHERE ModuleId = @ModuleId";
+
+                        parameters.Add(new SqlParameter("@ModuleId", moduleId));
+                        ExecuteNonQuery(cleanupQuery, parameters.ToArray());
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Fehler beim Aktualisieren der Notenanzahl: " + ex.Message);
+            }
+        }
+
         /// <summary>
         /// Ruft alle Module nach Lehrjahr ab
         /// </summary>
@@ -49,7 +106,7 @@ namespace INFAppDatabaseDotNet.Models
             try
             {
                 string query = @"
-                    SELECT ModuleId, SchoolYearId, ModuleName, ModuleCode, Description
+                    SELECT ModuleId, SchoolYearId, ModuleName, ModuleCode, Description, ISNULL(GradeCount, 3) AS GradeCount
                     FROM Modules
                     WHERE SchoolYearId = @SchoolYearId
                     ORDER BY ModuleName";
@@ -65,7 +122,8 @@ namespace INFAppDatabaseDotNet.Models
                         SchoolYearId = (int)row["SchoolYearId"],
                         ModuleName = row["ModuleName"].ToString(),
                         ModuleCode = row["ModuleCode"].ToString(),
-                        Description = row["Description"] != DBNull.Value ? row["Description"].ToString() : null
+                        Description = row["Description"] != DBNull.Value ? row["Description"].ToString() : null,
+                        GradeCount = (int)row["GradeCount"]
                     });
                 }
                 return modules;
@@ -84,7 +142,7 @@ namespace INFAppDatabaseDotNet.Models
             try
             {
                 string query = @"
-                    SELECT ModuleId, SchoolYearId, ModuleName, ModuleCode, Description
+                    SELECT ModuleId, SchoolYearId, ModuleName, ModuleCode, Description, ISNULL(GradeCount, 3) AS GradeCount
                     FROM Modules
                     WHERE ModuleId = @ModuleId";
 
@@ -99,7 +157,8 @@ namespace INFAppDatabaseDotNet.Models
                         SchoolYearId = (int)row["SchoolYearId"],
                         ModuleName = row["ModuleName"].ToString(),
                         ModuleCode = row["ModuleCode"].ToString(),
-                        Description = row["Description"] != DBNull.Value ? row["Description"].ToString() : null
+                        Description = row["Description"] != DBNull.Value ? row["Description"].ToString() : null,
+                        GradeCount = (int)row["GradeCount"]
                     };
                 }
                 return null;
@@ -118,7 +177,7 @@ namespace INFAppDatabaseDotNet.Models
             try
             {
                 string query = @"
-                    SELECT ModuleId, SchoolYearId, ModuleName, ModuleCode, Description
+                    SELECT ModuleId, SchoolYearId, ModuleName, ModuleCode, Description, ISNULL(GradeCount, 3) AS GradeCount
                     FROM Modules
                     ORDER BY SchoolYearId, ModuleName";
 
@@ -133,7 +192,8 @@ namespace INFAppDatabaseDotNet.Models
                         SchoolYearId = (int)row["SchoolYearId"],
                         ModuleName = row["ModuleName"].ToString(),
                         ModuleCode = row["ModuleCode"].ToString(),
-                        Description = row["Description"] != DBNull.Value ? row["Description"].ToString() : null
+                        Description = row["Description"] != DBNull.Value ? row["Description"].ToString() : null,
+                        GradeCount = (int)row["GradeCount"]
                     });
                 }
                 return modules;

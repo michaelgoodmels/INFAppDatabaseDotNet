@@ -1,0 +1,198 @@
+@model List<INFAppDatabaseDotNet.Models.Module>
+
+@{
+    ViewBag.Title = "Module Verwalten";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row mb-4">
+    <div class="col-lg-12">
+        <h1><i class="fas fa-cog"></i> Module Verwalten</h1>
+        <p class="text-muted">Konfigurieren Sie die Anzahl der Noten pro Modul</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="section">
+            <div class="section-header">
+                <i class="fas fa-list"></i> Module
+            </div>
+            <div class="section-body">
+                @if (Model.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40%;">Modul</th>
+                                    <th style="width: 20%;">Modulcode</th>
+                                    <th style="width: 20%;">Lehrjahr</th>
+                                    <th style="width: 20%;">Notenanzahl</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var module in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <strong>@module.ModuleName</strong>
+                                            @if (!string.IsNullOrEmpty(module.Description))
+                                            {
+                                                <br /><small style="color: #7dd3c0;">@module.Description</small>
+                                            }
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-secondary">@module.ModuleCode</span>
+                                        </td>
+                                        <td>
+                                            <span>Jahr @module.SchoolYearId</span>
+                                        </td>
+                                        <td>
+                                            <div style="display: flex; gap: 10px; align-items: center;">
+                                                <button type="button" class="btn btn-sm btn-danger grade-minus-btn" data-module-id="@module.ModuleId" data-current="@module.GradeCount">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
+                                                <span class="grade-count" data-module-id="@module.ModuleId" style="min-width: 30px; text-align: center; font-weight: bold; color: #7dd3c0;">@module.GradeCount</span>
+                                                <button type="button" class="btn btn-sm btn-success grade-plus-btn" data-module-id="@module.ModuleId" data-current="@module.GradeCount">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted text-center py-3">Keine Module vorhanden.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Zurück-Button -->
+<div class="row mt-4">
+    <div class="col-lg-12">
+        <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Zurück zum Dashboard
+        </a>
+    </div>
+</div>
+
+@Html.AntiForgeryToken()
+
+<script>
+    $(document).ready(function () {
+        function updateGradeCount(moduleId, newCount, button) {
+            if (newCount < 1 || newCount > 5) {
+                alert("Notenanzahl muss zwischen 1 und 5 liegen!");
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("UpdateGradeCount", "Admin")',
+                type: 'POST',
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                data: {
+                    moduleId: moduleId,
+                    gradeCount: newCount
+                },
+                success: function (response) {
+                    if (response.success) {
+                        $('[data-module-id="' + moduleId + '"].grade-count').text(newCount);
+                        $('[data-module-id="' + moduleId + '"].grade-plus-btn').data('current', newCount);
+                        $('[data-module-id="' + moduleId + '"].grade-minus-btn').data('current', newCount);
+                        alert("Notenanzahl aktualisiert!");
+                    } else {
+                        alert("Fehler: " + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("Fehler beim Speichern: " + error);
+                }
+            });
+        }
+
+        $(".grade-plus-btn").on("click", function () {
+            var moduleId = $(this).data("module-id");
+            var current = parseInt($(this).data("current"));
+            updateGradeCount(moduleId, current + 1, $(this));
+        });
+
+        $(".grade-minus-btn").on("click", function () {
+            var moduleId = $(this).data("module-id");
+            var current = parseInt($(this).data("current"));
+            updateGradeCount(moduleId, current - 1, $(this));
+        });
+    });
+</script>
+
+<style>
+    .section {
+        margin-bottom: 30px;
+    }
+
+    .section-header {
+        background: linear-gradient(135deg, #1b4d5c 0%, #7dd3c0 100%);
+        padding: 15px 20px;
+        border-radius: 8px 8px 0 0;
+        color: white;
+        border-bottom: 2px solid #7dd3c0;
+        font-weight: 600;
+    }
+
+    .section-body {
+        background-color: #0f2f38;
+        padding: 0;
+        border: 1px solid #7dd3c0;
+        border-top: none;
+        border-radius: 0 0 8px 8px;
+    }
+
+    .badge-secondary {
+        background-color: #2c6b7d;
+    }
+
+    h1 {
+        color: white;
+        margin-bottom: 10px;
+    }
+
+    .btn-secondary {
+        background-color: #2c6b7d;
+        border-color: #2c6b7d;
+        transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a9a8f;
+        border-color: #5a9a8f;
+        box-shadow: 0 4px 15px rgba(44, 107, 125, 0.3);
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #218838;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #c82333;
+    }
+</style>

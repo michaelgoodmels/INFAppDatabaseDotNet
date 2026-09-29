@@ -140,6 +140,34 @@ namespace INFAppDatabaseDotNet.Controllers
                 return View(new List<Student>());
             }
         }
+
+        public IActionResult ManageModules()
+        {
+            try
+            {
+                List<Module> modules = _moduleDA.GetAllModules();
+                return View(modules);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Fehler beim Laden der Module: " + ex.Message;
+                return View(new List<Module>());
+            }
+        }
+
+        [HttpPost]
+        public IActionResult UpdateGradeCount(int moduleId, int gradeCount)
+        {
+            try
+            {
+                _moduleDA.UpdateModuleGradeCount(moduleId, gradeCount);
+                return Json(new { success = true, message = "Notenanzahl aktualisiert" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
     }
 }
 
