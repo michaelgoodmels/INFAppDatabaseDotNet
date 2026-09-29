@@ -18,7 +18,7 @@ namespace INFAppDatabaseDotNet.Models
             try
             {
                 string query = @"
-                    SELECT GradeId, StudentId, ModuleId, Grade, EnteredAt, UpdatedAt
+                    SELECT GradeId, StudentId, ModuleId, Grade, Grade2, Grade3, EnteredAt, UpdatedAt
                     FROM StudentGrades
                     WHERE StudentId = @StudentId
                     ORDER BY ModuleId";
